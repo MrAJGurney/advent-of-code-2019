@@ -4,6 +4,7 @@
   "description": "My attempt at the [advent of code](https://adventofcode.com/)",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "jest",
     "lint": "eslint --fix \"./**/*.js\""
   },
