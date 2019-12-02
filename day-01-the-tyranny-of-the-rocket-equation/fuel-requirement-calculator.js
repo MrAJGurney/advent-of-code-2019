@@ -1,13 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const calculateSecondPuzzleSolution =() => {
+const _theTyrannyOfTbeRocketEquationSecond =() => {
 	const masses = readMassesFromFile();
 	const totalFuel = calculateTotalFuelForMassesAndFuel(masses);
 	return totalFuel;
 };
 
-const calculateFirstPuzzleSolution = () => {
+const _theTyrannyOfTbeRocketEquationFirst = () => {
 	const masses = readMassesFromFile();
 	const totalFuel = calculateTotalFuelForMasses(masses);
 	return totalFuel;
@@ -64,8 +64,8 @@ const calculateFuelRequiredForMass = mass => {
 };
 
 module.exports = {
-	calculateSecondPuzzleSolution,
-	calculateFirstPuzzleSolution,
+	_theTyrannyOfTbeRocketEquationSecond,
+	_theTyrannyOfTbeRocketEquationFirst,
 	calculateTotalFuelForMasses,
 	calculateTotalFuelForMassAndFuel,
 	calculateFuelRequiredForMass,
