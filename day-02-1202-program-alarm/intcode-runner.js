@@ -16,6 +16,22 @@ const _1202ProgramAlarmFirst = () => {
 };
 
 const _1202ProgramAlarmSecond = () => {
+	const targetOutput = 19690720;
+
+	while (true) {
+		const startState = readIntcodeFromFile();
+		for (let noun = 0; noun < 99; noun++) {
+			for (let verb = 0; verb < 99; verb++) {
+				startState[1] = noun;
+				startState[2] = verb;
+				const endState = computeFinalState(startState);
+				if (endState[0] === targetOutput)
+					return (100 * noun) + verb;
+			}
+		}
+		throw new Error('Combination not found');
+	}
+
 };
 
 const readIntcodeFromFile = () => {
