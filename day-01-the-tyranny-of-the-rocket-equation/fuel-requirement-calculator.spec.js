@@ -1,5 +1,6 @@
 const {
 	calculateTotalFuelForMasses,
+	calculateTotalFuelForMassAndFuel,
 	calculateFuelRequiredForMass,
 } = require('./fuel-requirement-calculator.js');
 
@@ -14,12 +15,27 @@ describe('calculateTotalFuelForMasses', () => {
 	});
 });
 
+describe('calculateTotalFuelForMassesAndFuel', () => {
+	const massToFuel = [
+		[14, 2,],
+		[1969, 966,],
+		[100756, 50346,],
+	];
+	describe.each(massToFuel)('when the mass is %i', (mass, expectedFuel) => {
+		it(`returns a fuel of ${expectedFuel}`, () => {
+			const fuel = calculateTotalFuelForMassAndFuel(mass);
+			expect(fuel).toBe(expectedFuel);
+		});
+	});
+});
+
 describe('calculateFuelRequiredForMass', () => {
 	const massToFuel = [
 		[12, 2,],
 		[14, 2,],
 		[1969, 654,],
 		[100756, 33583,],
+		[0, 0,],
 	];
 	describe.each(massToFuel)('when the mass is %i', (mass, expectedFuel) => {
 		it(`returns a fuel of ${expectedFuel}`, () => {
