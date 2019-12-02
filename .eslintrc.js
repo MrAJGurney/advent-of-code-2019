@@ -13,7 +13,12 @@ module.exports = {
 	},
 	'rules': {
 		'arrow-parens': ['error', 'as-needed',],
-		'comma-dangle': ['error', 'always',],
+		'comma-dangle': ['error', {
+			'arrays': 'always',
+			'objects': 'always',
+			'imports': 'never',
+			'exports': 'never',
+			'functions': 'never', },],
 		'indent': [
 			'error',
 			'tab',
