@@ -1,6 +1,6 @@
 const {
 	_theTyrannyOfTbeRocketEquationFirst,
-	_theTyrannyOfTbeRocketEquationSecond
+	_theTyrannyOfTbeRocketEquationSecond,
 } = require('./fuel-requirement-calculator.js');
 
 module.exports = {

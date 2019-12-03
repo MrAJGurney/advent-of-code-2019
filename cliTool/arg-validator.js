@@ -21,7 +21,9 @@ const validateArg = (argValue, argName, min, max) => {
 	const isValidInteger = validateInteger(parsedValue);
 	const isValidRange = validateRange(parsedValue, min, max);
 	if (!isValidInteger || !isValidRange) {
-		throw new Error(argName + ' must be an integer between ' + min + ' and ' + max + ' inclusive. Incorrect value: ' + argValue);
+		throw new Error(
+			argName + ' must be an integer between ' +
+			min + ' and ' + max + ' inclusive. Incorrect value: ' + argValue);
 	}
 };
 
