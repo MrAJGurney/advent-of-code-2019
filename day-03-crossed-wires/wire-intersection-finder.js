@@ -3,11 +3,17 @@ const path = require('path');
 
 const _CrossedWiresAlarmFirst = () => {
 	const [wirePathA, wirePathB,] = readWirePathFromFile();
-	const intersectionDistance = findWireIntersection(wirePathA, wirePathB);
+	const intersectionDistance =
+	findWireIntersectionClosestToOrigin(wirePathA, wirePathB);
 	return intersectionDistance;
 };
 
-const _CrossedWiresAlarmSecond = () => {};
+const _CrossedWiresAlarmSecond = () => {
+	const [wirePathA, wirePathB,] = readWirePathFromFile();
+	const combinedDistanceTravelled =
+	findWireIntersectionWithLeastDistanceTravelled(wirePathA, wirePathB);
+	return combinedDistanceTravelled;
+};
 
 const readWirePathFromFile = () => {
 	const inputFile = 'input.txt';
@@ -20,7 +26,22 @@ const readWirePathFromFile = () => {
 	return wirePathsAsInstructions;
 };
 
-const findWireIntersection = (wirePathA, wirePathB) => {
+const findWireIntersectionClosestToOrigin = (wirePathA, wirePathB) => {
+	const intersectionPoints = findWireIntersections(wirePathA, wirePathB);
+	const closestIntersection = findPointClosestToOrigin(intersectionPoints);
+	return manhattenDistance(closestIntersection);
+};
+
+const findWireIntersectionWithLeastDistanceTravelled = (
+	wirePathA, wirePathB
+) => {
+	const intersectionPoints = findWireIntersections(wirePathA, wirePathB);
+	const closestIntersection =
+	findPointWithLeastTravelDistance(intersectionPoints);
+	return closestIntersection.totalDistanceTravelled;
+};
+
+const findWireIntersections = (wirePathA, wirePathB) => {
 	const pointsOfA = findPointsOnPath(wirePathA);
 	const pointsOfAWithoutStartingPoint = pointsOfA.slice(1);
 	const pointsOfB = findPointsOnPath(wirePathB);
@@ -28,12 +49,11 @@ const findWireIntersection = (wirePathA, wirePathB) => {
 	const intersectionPoints = findPointsOfIntersection(
 		pointsOfAWithoutStartingPoint,
 		pointsOfBWithoutStartingPoint);
-	const closestIntersection = findPointClosestToOrigin(intersectionPoints);
-	return manhattenDistance(closestIntersection);
+	return intersectionPoints;
 };
 
 const findPointsOnPath = instructions => {
-	const origin = { x:0, y:0, };
+	const origin = { x:0, y:0, distanceTravelled: 0, };
 	let points = [origin,];
 	const currentPoint = () => points[points.length - 1];
 	instructions.forEach(instruction => {
@@ -49,8 +69,7 @@ const newPointsFromInstruction = (startPoint, instruction) => {
 
 	const { code, value, } = parseInstruction(instruction);
 	for (let i = 0; i < value; i++) {
-		const { x, y, } = currentPoint();
-		const newPoint = { x, y, };
+		const newPoint = JSON.parse(JSON.stringify(currentPoint()));
 		switch (code) {
 		case 'U':
 			newPoint.y = newPoint.y + 1;
@@ -67,6 +86,7 @@ const newPointsFromInstruction = (startPoint, instruction) => {
 		default:
 			throw new Error('Unhandled code: ' + code);
 		}
+		newPoint.distanceTravelled = newPoint.distanceTravelled + 1;
 		points.push(newPoint);
 	}
 
@@ -85,20 +105,30 @@ const parseInstruction = instruction => {
 };
 
 const findPointsOfIntersection = (pointsA, pointsB) => {
-	const isIntersection = pointInA => {
+	const pointBIntersectionIndex = pointInA => {
 		const indexOfIntersection =  pointsB.findIndex(pointInB => {
 			const sameX = pointInA.x === pointInB.x;
 			const sameY = pointInA.y === pointInB.y;
 			return sameX && sameY;
 		});
-		return indexOfIntersection !== -1;
+		return indexOfIntersection;
 	};
 
 	const intersectionPoints = [];
 
 	pointsA.forEach(pointInA => {
-		if (isIntersection(pointInA)) {
-			intersectionPoints.push(pointInA);
+		const indexOfB = pointBIntersectionIndex(pointInA);
+		if (indexOfB !== -1) {
+			const totalDistanceTravelled =
+				pointInA.distanceTravelled +
+				pointsB[indexOfB].distanceTravelled;
+			intersectionPoints.push(
+				{
+					x: pointInA.x,
+					y: pointInA.y,
+					totalDistanceTravelled,
+				 }
+			);
 		}
 	});
 
@@ -112,10 +142,18 @@ const findPointClosestToOrigin = intersectionPoints => {
 	return sortedIntersectionPoints[0];
 };
 
+const findPointWithLeastTravelDistance = intersectionPoints => {
+	const sortedIntersectionPoints = intersectionPoints.sort(
+		(a, b) =>  a.totalDistanceTravelled - b.totalDistanceTravelled
+	);
+	return sortedIntersectionPoints[0];
+};
+
 const manhattenDistance = point => Math.abs(point.x) + Math.abs(point.y);
 
 module.exports = {
 	_CrossedWiresAlarmFirst,
 	_CrossedWiresAlarmSecond,
-	findWireIntersection,
+	findWireIntersectionClosestToOrigin,
+	findWireIntersectionWithLeastDistanceTravelled,
 };
