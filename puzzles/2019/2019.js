@@ -1,5 +1,14 @@
 module.exports = {
-	'1': require('./day-01-the-tyranny-of-the-rocket-equation/day-01.js'),
-	'2': require('./day-02-1202-program-alarm/day-02.js'),
-	'3': require('./day-03-crossed-wires/day-03.js'),
+	'1': {
+		title: 'The Tyranny of the Rocket Equation',
+		stars: require('./01/01.js'),
+	},
+	'2': {
+		title: '1202 Program Alarm',
+		stars: require('./02/02.js'),
+	},
+	'3': {
+		title: 'Crossed Wires',
+		stars: require('./03/03.js'),
+	},
 };

@@ -13,22 +13,32 @@ const adventOfCode = () => {
 	validateDay(day);
 	validateStar(star);
 
-	const solver = puzzles[year][day][star];
+	const solver = puzzles[year][day].stars[star];
+	const title = puzzles[year][day].title;
 	const { solution, executionTime, } = solveWithExecutionTime(solver);
 
 	/* eslint-disable no-console */
-	console.log('year:',year,'day:','star:',star,'solution:',solution);
-	console.log('Execution time: %ds %dms',
-		executionTime[0],
-		executionTime[1] / 1000000);
+	console.log(
+		JSON.stringify({
+			title,
+			date: {
+				year,
+				day,
+				star,
+			},
+			executionTime,
+			solution,
+		}, null, 2)
+	);
 	/* eslint-enable no-console */
 };
 
 const solveWithExecutionTime = solver => {
 	const highResolutionTimeStart = process.hrtime();
 	const solution = solver();
-	const highResolutionTimeEnd = process.hrtime(highResolutionTimeStart);
-	return { solution, executionTime: highResolutionTimeEnd, };
+	const [seconds, nanoseconds,] = process.hrtime(highResolutionTimeStart);
+	const milliseconds = Math.ceil(nanoseconds / 1000);
+	return { solution, executionTime: { seconds, milliseconds, }, };
 };
 
 adventOfCode();
