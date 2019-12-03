@@ -1,30 +1,4 @@
-const fs = require('fs');
-const path = require('path');
 
-const _CrossedWiresAlarmFirst = () => {
-	const [wirePathA, wirePathB,] = readWirePathFromFile();
-	const intersectionDistance =
-	findWireIntersectionClosestToOrigin(wirePathA, wirePathB);
-	return intersectionDistance;
-};
-
-const _CrossedWiresAlarmSecond = () => {
-	const [wirePathA, wirePathB,] = readWirePathFromFile();
-	const combinedDistanceTravelled =
-	findWireIntersectionWithLeastDistanceTravelled(wirePathA, wirePathB);
-	return combinedDistanceTravelled;
-};
-
-const readWirePathFromFile = () => {
-	const inputFile = 'input.txt';
-	const filePath = path.join(__dirname, inputFile);
-	const fileContents = fs.readFileSync(filePath, 'utf-8');
-	const wirePathsAsText = fileContents.trim().split('\n');
-	const wirePathsAsInstructions = wirePathsAsText.map(
-		path => path.split(',')
-	);
-	return wirePathsAsInstructions;
-};
 
 const findWireIntersectionClosestToOrigin = (wirePathA, wirePathB) => {
 	const intersectionPoints = findWireIntersections(wirePathA, wirePathB);
@@ -152,8 +126,6 @@ const findPointWithLeastTravelDistance = intersectionPoints => {
 const manhattenDistance = point => Math.abs(point.x) + Math.abs(point.y);
 
 module.exports = {
-	_CrossedWiresAlarmFirst,
-	_CrossedWiresAlarmSecond,
 	findWireIntersectionClosestToOrigin,
 	findWireIntersectionWithLeastDistanceTravelled,
 };
