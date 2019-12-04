@@ -6,14 +6,20 @@ const getValidPasswordCount = (min, max) => {
 		throw new Error('Unexpected minimum password length');
 	}
 
-	const validPasswords = getValidPasswords(min, max);
+	const passwords = getPasswordsWithAscendingDigitsInRange(min, max);
+	const validPasswords = getPasswordsWithAdjacentSameDigits(passwords);
 	return validPasswords.length;
 };
 
-const getValidPasswords = (min, max) => {
+const getValidPasswordCountWithAdditionalRule = (min, max) => {
+	if (splitDigits(min) < passwordLength ||
+		splitDigits(max) > passwordLength) {
+		throw new Error('Unexpected minimum password length');
+	}
+
 	const passwords = getPasswordsWithAscendingDigitsInRange(min, max);
-	const validPasswords = getPasswordsWithAdjacentSameDigits(passwords);
-	return validPasswords;
+	const validPasswords = getPasswordsWithLimitedAdjacentSameDigits(passwords);
+	return validPasswords.length;
 };
 
 const getPasswordsWithAscendingDigitsInRange = (min, max) => {
@@ -60,6 +66,21 @@ const getPasswordsWithAdjacentSameDigits = passwords => {
 	});
 };
 
+const getPasswordsWithLimitedAdjacentSameDigits = passwords => {
+	return passwords.filter(password => {
+		const passwordDigits = splitDigits(password);
+		for (i = 0; i < passwordDigits.length - 1; i++) {
+			if (passwordDigits[i] === passwordDigits[i + 1]){
+				if (passwordDigits[i] !== passwordDigits[i -1] &&
+					passwordDigits[i + 1] !== passwordDigits[i + 2]){
+					return true;
+				}
+			}
+		}
+		return false;
+	});
+};
+
 const splitDigits = number => {
 	const radix = 10;
 	return [...number.toString(radix),].map(x => parseInt(x));
@@ -70,4 +91,5 @@ const getMagnitudeFromIndex = index =>
 
 module.exports = {
 	getValidPasswordCount,
+	getValidPasswordCountWithAdditionalRule,
 };
