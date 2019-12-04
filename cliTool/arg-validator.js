@@ -6,7 +6,7 @@ const validateYear = year => {
 
 const validateDay = day => {
 	const min = 1;
-	const max = 30;
+	const max = 25;
 	validateArg(day, 'day', min, max);
 };
 
