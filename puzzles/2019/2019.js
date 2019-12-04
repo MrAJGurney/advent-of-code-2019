@@ -11,4 +11,8 @@ module.exports = {
 		title: 'Crossed Wires',
 		stars: require('./03/03.js'),
 	},
+	'4': {
+		title: 'Secure Container',
+		stars: require('./04/04.js'),
+	},
 };
