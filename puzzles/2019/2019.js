@@ -15,4 +15,8 @@ module.exports = {
 		title: 'Secure Container',
 		stars: require('./04/04.js'),
 	},
+	'5': {
+		title: 'Sunny with a Chance of Asteroids',
+		stars: require('./05/05.js'),
+	},
 };

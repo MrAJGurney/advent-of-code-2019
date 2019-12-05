@@ -5,7 +5,7 @@ const {
 	validateStar,
 } = require('./cliTool/arg-validator.js');
 
-const adventOfCode = () => {
+const adventOfCode = async () => {
 	const args = process.argv.slice(2);
 	const [year, day, star,] = args;
 
@@ -15,7 +15,7 @@ const adventOfCode = () => {
 
 	const solver = puzzles[year][day].stars[star];
 	const title = puzzles[year][day].title;
-	const { solution, executionTime, } = solveWithExecutionTime(solver);
+	const { solution, executionTime, } = await solveWithExecutionTime(solver);
 
 	/* eslint-disable no-console */
 	console.log(
@@ -33,9 +33,9 @@ const adventOfCode = () => {
 	/* eslint-enable no-console */
 };
 
-const solveWithExecutionTime = solver => {
+const solveWithExecutionTime = async solver => {
 	const highResolutionTimeStart = process.hrtime();
-	const solution = solver();
+	const solution = await solver();
 	const [seconds, nanoseconds,] = process.hrtime(highResolutionTimeStart);
 	const milliseconds = Math.ceil(nanoseconds / 1000);
 	return { solution, executionTime: { seconds, milliseconds, }, };
