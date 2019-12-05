@@ -13,6 +13,10 @@ const requestTerminalInput = async inputName => {
 	return terminalInput;
 };
 
+const buildTerminalInputProvider = terminalInput => {
+	return () => terminalInput;
+};
+
 const buildTerminalOutputHandler = () => {
 	const outputStore = [];
 
@@ -32,5 +36,6 @@ const buildTerminalOutputHandler = () => {
 
 module.exports = {
 	requestTerminalInput,
+	buildTerminalInputProvider,
 	buildTerminalOutputHandler,
 };

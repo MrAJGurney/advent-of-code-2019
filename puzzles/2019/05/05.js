@@ -2,7 +2,7 @@ const {
 	runDiagnostics,
 } = require('./intcode-terminal');
 const {
-	requestTerminalInput,
+	buildTerminalInputProvider,
 	buildTerminalOutputHandler,
 } = require('./terminal-interactions');
 const {
@@ -11,19 +11,39 @@ const {
 
 const solveFirstChallenge = async () => {
 	const startState = readIntcodeFromFile();
+	const inputId = 2;
+
 	const {
 		handleTerminalOutput,
 		getDiagnosticCode,
 	} = buildTerminalOutputHandler();
+	const terminalInputProvider = buildTerminalInputProvider(inputId);
+
 	await runDiagnostics(
 		startState,
-		requestTerminalInput,
+		terminalInputProvider,
 		handleTerminalOutput
 	);
 	return getDiagnosticCode();
 };
 
-const solveSecondChallenge = () => {};
+const solveSecondChallenge = async () => {
+	const startState = readIntcodeFromFile();
+	const inputId = 5;
+
+	const {
+		handleTerminalOutput,
+		getDiagnosticCode,
+	} = buildTerminalOutputHandler();
+	const terminalInputProvider = buildTerminalInputProvider(inputId);
+
+	await runDiagnostics(
+		startState,
+		terminalInputProvider,
+		handleTerminalOutput
+	);
+	return getDiagnosticCode();
+};
 
 module.exports = {
 	'1': solveFirstChallenge,
