@@ -7,12 +7,16 @@ const {
 
 const solveFirstChallenge = async () => {
 	const startState = readIntcodeFromFile();
-	const diagnosticCode = runDiagnostics(
+	const {
+		handleTerminalOutput,
+		getDiagnosticCode,
+	} = buildTerminalOutputHandler();
+	await runDiagnostics(
 		startState,
 		requestTerminalInput,
 		handleTerminalOutput
 	);
-	return diagnosticCode;
+	return getDiagnosticCode();
 };
 
 const solveSecondChallenge = () => {};
@@ -39,9 +43,21 @@ const requestTerminalInput = async inputName => {
 	return terminalInput;
 };
 
-const handleTerminalOutput = outputValue => {
-	/* eslint-disable-next-line no-console */
-	console.log(outputValue);
+const buildTerminalOutputHandler = () => {
+	const outputStore = [];
+
+	const handleTerminalOutput = outputValue => {
+		outputStore.push(outputValue);
+	};
+
+	const getDiagnosticCode = () => {
+		return outputStore[outputStore.length - 1];
+	};
+
+	return {
+		handleTerminalOutput,
+		getDiagnosticCode,
+	};
 };
 
 module.exports = {
