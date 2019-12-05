@@ -1,5 +1,4 @@
 
-
 const findWireIntersectionClosestToOrigin = (wirePathA, wirePathB) => {
 	const intersectionPoints = findWireIntersections(wirePathA, wirePathB);
 	const closestIntersection = findPointClosestToOrigin(intersectionPoints);
