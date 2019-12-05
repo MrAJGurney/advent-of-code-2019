@@ -42,8 +42,6 @@ const PARAMETER_MODES = {
 	immediate: 1,
 };
 
-const NO_INSTRUCTION_PTR_JUMP = -1;
-
 const runDiagnostics = async (
 	startState,
 	requestTerminalInput,
@@ -55,6 +53,7 @@ const runDiagnostics = async (
 		handleTerminalOutput);
 	return undefined;
 };
+
 const computeFinalState = async (
 	startState,
 	requestTerminalInput,
@@ -73,20 +72,18 @@ const computeFinalState = async (
 		{
 			break;
 		}
-		const instructionPtrJumpTo = await handleOperation(
+		instructionPtr = await handleOperation(
 			memoryState,
-			operation,
-			parameters,
-			parametersModes,
-			requestTerminalInput,
-			handleTerminalOutput
-		);
-
-		if (instructionPtrJumpTo === NO_INSTRUCTION_PTR_JUMP) {
-			instructionPtr = instructionPtr + operation.length;
-		} else {
-			instructionPtr = instructionPtrJumpTo;
-		}
+			instructionPtr,
+			{
+				operation,
+				parameters,
+				parametersModes,
+			},
+			{
+				requestTerminalInput,
+				handleTerminalOutput,
+			});
 	}
 
 	return undefined;
@@ -150,11 +147,17 @@ const splitDigits = number => {
 
 const handleOperation = async (
 	memoryState,
-	operation,
-	parameters,
-	parametersModes,
-	requestTerminalInput,
-	handleTerminalOutput) => {
+	instructionPtr,
+	{
+		operation,
+		parameters,
+		parametersModes,
+	},
+	{
+		requestTerminalInput,
+		handleTerminalOutput,
+	}
+) => {
 	if (operation.code === OPERATIONS.add.code) {
 		const [verb, noun, write,] = parameters;
 		const [verbMode, nounMode, writeMode,] = parametersModes;
@@ -168,7 +171,7 @@ const handleOperation = async (
 			(nounMode === PARAMETER_MODES.immediate ?
 				noun :
 				memoryState[noun]);
-		return NO_INSTRUCTION_PTR_JUMP;
+		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.multiply.code) {
@@ -184,7 +187,7 @@ const handleOperation = async (
 			(nounMode === PARAMETER_MODES.immediate ?
 				noun :
 				memoryState[noun]);
-		return NO_INSTRUCTION_PTR_JUMP;
+		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.input.code) {
@@ -195,7 +198,7 @@ const handleOperation = async (
 		}
 		const id = await requestTerminalInput('ID');
 		memoryState[write] = id;
-		return NO_INSTRUCTION_PTR_JUMP;
+		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.output.code) {
@@ -207,7 +210,7 @@ const handleOperation = async (
 				out :
 				memoryState[out];
 		handleTerminalOutput(output);
-		return NO_INSTRUCTION_PTR_JUMP;
+		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.jumpIfTrue.code) {
@@ -221,12 +224,11 @@ const handleOperation = async (
 			jumpTo :
 			memoryState[jumpTo]);
 
-		const instructionPtrJumpTo =
-			verbValue !== 0 ?
-				jumpToValue :
-				NO_INSTRUCTION_PTR_JUMP;
+		if (verbValue !== 0) {
+			return jumpToValue;
+		}
 
-		return instructionPtrJumpTo;
+		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.jumpIfFalse.code) {
@@ -240,12 +242,11 @@ const handleOperation = async (
 			jumpTo :
 			memoryState[jumpTo]);
 
-		const instructionPtrJumpTo =
-			verbValue === 0 ?
-				jumpToValue :
-				NO_INSTRUCTION_PTR_JUMP;
+		if (verbValue === 0) {
+			return jumpToValue;
+		}
 
-		return instructionPtrJumpTo;
+		return instructionPtr + operation.length;
 	};
 
 	if (operation.code === OPERATIONS.lessThan.code) {
@@ -264,7 +265,7 @@ const handleOperation = async (
 
 		memoryState[write] = isLessThan ? 1 : 0;
 
-		return NO_INSTRUCTION_PTR_JUMP;
+		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.equals.code) {
@@ -283,11 +284,11 @@ const handleOperation = async (
 
 		memoryState[write] = equals ? 1 : 0;
 
-		return NO_INSTRUCTION_PTR_JUMP;
+		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.exit.code) {
-		return NO_INSTRUCTION_PTR_JUMP;
+		return instructionPtr + operation.length;
 	}
 
 	throw new Error('Unhandled operation code');
