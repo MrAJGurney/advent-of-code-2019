@@ -3,7 +3,7 @@ const path = require('path');
 const {
 	findWireIntersectionClosestToOrigin,
 	findWireIntersectionWithLeastDistanceTravelled,
-} = require('./wire-intersection-finder.js');
+} = require('./wire-intersection-finder');
 
 const solveFirstChallenge = () => {
 	const [wirePathA, wirePathB,] = readWirePathFromFile();

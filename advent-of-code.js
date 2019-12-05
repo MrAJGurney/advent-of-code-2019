@@ -1,9 +1,9 @@
-const puzzles = require('./puzzles/puzzles.js');
+const puzzles = require('./puzzles/puzzles');
 const {
 	validateYear,
 	validateDay,
 	validateStar,
-} = require('./cliTool/arg-validator.js');
+} = require('./cliTool/arg-validator');
 
 const adventOfCode = async () => {
 	const args = process.argv.slice(2);

@@ -2,7 +2,7 @@ const {
 	calculateTotalFuelForMasses,
 	calculateTotalFuelForMassAndFuel,
 	calculateFuelRequiredForMass,
-} = require('./fuel-requirement-calculator.js');
+} = require('./fuel-requirement-calculator');
 
 describe('calculateTotalFuelForMasses', () => {
 	const masses = [12,14,  1969,];

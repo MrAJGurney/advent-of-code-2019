@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const {
 	computeFinalState,
-} = require('./intcode-runner.js');
+} = require('./intcode-runner');
 
 const solveFirstChallenge = () => {
 	const startState = readIntcodeFromFile();

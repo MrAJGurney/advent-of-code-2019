@@ -1,7 +1,7 @@
 const {
 	findWireIntersectionClosestToOrigin,
 	findWireIntersectionWithLeastDistanceTravelled,
-} = require('./wire-intersection-finder.js');
+} = require('./wire-intersection-finder');
 
 describe('findWireIntersectionClosestToOrigin', () => {
 	/* eslint-disable max-len */

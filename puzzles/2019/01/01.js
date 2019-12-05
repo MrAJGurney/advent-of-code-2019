@@ -3,7 +3,7 @@ const path = require('path');
 const {
 	calculateTotalFuelForMasses,
 	calculateTotalFuelForMassesAndFuel,
-} = require('./fuel-requirement-calculator.js');
+} = require('./fuel-requirement-calculator');
 
 const solveFirstChallenge = () => {
 	const masses = readMassesFromFile();

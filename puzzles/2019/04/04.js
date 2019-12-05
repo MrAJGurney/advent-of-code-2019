@@ -1,7 +1,7 @@
 const {
 	getValidPasswordCount,
 	getValidPasswordCountWithAdditionalRule,
-} = require('./password-generator.js');
+} = require('./password-generator');
 
 const solveFirstChallenge = () => {
 	const puzzleInput = '183564-657474';

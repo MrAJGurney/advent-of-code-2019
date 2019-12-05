@@ -1,6 +1,6 @@
 const {
 	computeFinalState,
-} = require('./intcode-runner.js');
+} = require('./intcode-runner');
 
 describe('computeFinalState', () => {
 	const states =[
