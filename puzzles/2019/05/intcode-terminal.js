@@ -68,22 +68,29 @@ const computeFinalState = async (
 			parameters,
 			parametersModes,
 		} = deconstructInstruction(memoryState, instructionPtr);
+
 		if (operation.code === OPERATIONS.exit.code)
 		{
 			break;
 		}
+
 		instructionPtr = await handleOperation(
-			memoryState,
-			instructionPtr,
 			{
-				operation,
-				parameters,
-				parametersModes,
-			},
-			{
-				requestTerminalInput,
-				handleTerminalOutput,
-			});
+				state: {
+					memoryState,
+					instructionPtr,
+				},
+				instruction: {
+					operation,
+					parameters,
+					parametersModes,
+				},
+				terminalIO: {
+					requestTerminalInput,
+					handleTerminalOutput,
+				},
+			}
+		);
 	}
 
 	return undefined;
@@ -146,16 +153,20 @@ const splitDigits = number => {
 };
 
 const handleOperation = async (
-	memoryState,
-	instructionPtr,
 	{
-		operation,
-		parameters,
-		parametersModes,
-	},
-	{
-		requestTerminalInput,
-		handleTerminalOutput,
+		state: {
+			memoryState,
+			instructionPtr,
+		},
+		instruction: {
+			operation,
+			parameters,
+			parametersModes,
+		},
+		terminalIO: {
+			requestTerminalInput,
+			handleTerminalOutput,
+		},
 	}
 ) => {
 	if (operation.code === OPERATIONS.add.code) {
@@ -165,12 +176,8 @@ const handleOperation = async (
 			throw new Error('Out parameter can not be in immediate mode');
 		}
 		memoryState[write] =
-			(verbMode === PARAMETER_MODES.immediate ?
-				verb :
-				memoryState[verb]) +
-			(nounMode === PARAMETER_MODES.immediate ?
-				noun :
-				memoryState[noun]);
+			getParameterValue(verb, verbMode, memoryState) +
+			getParameterValue(noun, nounMode, memoryState);
 		return instructionPtr + operation.length;
 	}
 
@@ -181,12 +188,8 @@ const handleOperation = async (
 			throw new Error('Out parameter can not be in immediate mode');
 		}
 		memoryState[write] =
-			(verbMode === PARAMETER_MODES.immediate ?
-				verb :
-				memoryState[verb]) *
-			(nounMode === PARAMETER_MODES.immediate ?
-				noun :
-				memoryState[noun]);
+			getParameterValue(verb, verbMode, memoryState) *
+			getParameterValue(noun, nounMode, memoryState);
 		return instructionPtr + operation.length;
 	}
 
@@ -206,9 +209,7 @@ const handleOperation = async (
 		const [outMode,] = parametersModes;
 
 		const output =
-			outMode === PARAMETER_MODES.immediate ?
-				out :
-				memoryState[out];
+			getParameterValue(out, outMode, memoryState);
 		handleTerminalOutput(output);
 		return instructionPtr + operation.length;
 	}
@@ -216,36 +217,18 @@ const handleOperation = async (
 	if (operation.code === OPERATIONS.jumpIfTrue.code) {
 		const [verb, jumpTo,] = parameters;
 		const [verbMode, jumpToMode,] = parametersModes;
-
-		const verbValue = (verbMode === PARAMETER_MODES.immediate ?
-			verb :
-			memoryState[verb]);
-		const jumpToValue = (jumpToMode === PARAMETER_MODES.immediate ?
-			jumpTo :
-			memoryState[jumpTo]);
-
-		if (verbValue !== 0) {
-			return jumpToValue;
+		if (getParameterValue(verb, verbMode, memoryState) !== 0) {
+			return getParameterValue(jumpTo, jumpToMode, memoryState);
 		}
-
 		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.jumpIfFalse.code) {
 		const [verb, jumpTo,] = parameters;
 		const [verbMode, jumpToMode,] = parametersModes;
-
-		const verbValue = (verbMode === PARAMETER_MODES.immediate ?
-			verb :
-			memoryState[verb]);
-		const jumpToValue = (jumpToMode === PARAMETER_MODES.immediate ?
-			jumpTo :
-			memoryState[jumpTo]);
-
-		if (verbValue === 0) {
-			return jumpToValue;
+		if (getParameterValue(verb, verbMode, memoryState) === 0) {
+			return getParameterValue(jumpTo, jumpToMode, memoryState);
 		}
-
 		return instructionPtr + operation.length;
 	};
 
@@ -256,12 +239,8 @@ const handleOperation = async (
 			throw new Error('Out parameter can not be in immediate mode');
 		}
 		const isLessThan =
-			(verbMode === PARAMETER_MODES.immediate ?
-				verb :
-				memoryState[verb]) <
-			(nounMode === PARAMETER_MODES.immediate ?
-				noun :
-				memoryState[noun]);
+			getParameterValue(verb, verbMode, memoryState) <
+			getParameterValue(noun, nounMode, memoryState);
 
 		memoryState[write] = isLessThan ? 1 : 0;
 
@@ -275,12 +254,8 @@ const handleOperation = async (
 			throw new Error('Out parameter can not be in immediate mode');
 		}
 		const equals =
-			(verbMode === PARAMETER_MODES.immediate ?
-				verb :
-				memoryState[verb]) ===
-			(nounMode === PARAMETER_MODES.immediate ?
-				noun :
-				memoryState[noun]);
+			getParameterValue(verb, verbMode, memoryState) ===
+			getParameterValue(noun, nounMode, memoryState);
 
 		memoryState[write] = equals ? 1 : 0;
 
@@ -292,6 +267,12 @@ const handleOperation = async (
 	}
 
 	throw new Error('Unhandled operation code');
+};
+
+const getParameterValue = (parameter, parameterMode, memoryState) => {
+	return parameterMode === PARAMETER_MODES.immediate ?
+		parameter :
+		memoryState[parameter];
 };
 
 module.exports = {
