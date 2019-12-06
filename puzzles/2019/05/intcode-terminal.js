@@ -65,8 +65,8 @@ const computeFinalState = async (
 	while(true) {
 		const {
 			operation,
-			parameters,
-			parametersModes,
+			params,
+			paramsModes,
 		} = deconstructInstruction(memoryState, instructionPtr);
 
 		if (operation.code === OPERATIONS.exit.code)
@@ -82,8 +82,8 @@ const computeFinalState = async (
 				},
 				instruction: {
 					operation,
-					parameters,
-					parametersModes,
+					params,
+					paramsModes,
 				},
 				terminalIO: {
 					requestTerminalInput,
@@ -98,18 +98,18 @@ const computeFinalState = async (
 
 const deconstructInstruction = (memoryState, instructionPtr) => {
 	const {
-		parametersModes,
+		paramsModes,
 		operation,
 	} = deconstructOperation(memoryState[instructionPtr]);
 
-	const parameterSliceStart = instructionPtr + 1;
-	const parameterSliceEnd = instructionPtr + operation.length;
-	const parameters = memoryState.slice(
-		parameterSliceStart,
-		parameterSliceEnd
+	const paramSliceStart = instructionPtr + 1;
+	const paramSliceEnd = instructionPtr + operation.length;
+	const params = memoryState.slice(
+		paramSliceStart,
+		paramSliceEnd
 	);
 
-	return { operation, parameters, parametersModes, };
+	return { operation, params, paramsModes, };
 };
 
 const deconstructOperation = instruction => {
@@ -130,14 +130,14 @@ const deconstructOperation = instruction => {
 	splitInstruction.pop();
 	splitInstruction.pop();
 
-	// Adds leading zeroes to parameter Modes
+	// Adds leading zeroes to parameter modes
 	while(splitInstruction.length < (operation.length - 1)) {
 		splitInstruction.unshift(0);
 	}
 
-	const parametersModes = splitInstruction.slice().reverse();
+	const paramsModes = splitInstruction.slice().reverse();
 
-	return { parametersModes, operation, };
+	return { paramsModes, operation, };
 };
 
 const getOperationByCode = operationCode => {
@@ -160,8 +160,8 @@ const handleOperation = async (
 		},
 		instruction: {
 			operation,
-			parameters,
-			parametersModes,
+			params,
+			paramsModes,
 		},
 		terminalIO: {
 			requestTerminalInput,
@@ -170,85 +170,81 @@ const handleOperation = async (
 	}
 ) => {
 	if (operation.code === OPERATIONS.add.code) {
-		const [verb, noun, write,] = parameters;
-		const [verbMode, nounMode, writeMode,] = parametersModes;
-		throwIfParameterIsInImmediateMode(writeMode, 'write');
+		const [verb, noun, write,] = params;
+		const [verbMode, nounMode, writeMode,] = paramsModes;
+		throwIfParamIsInImmediateMode(writeMode, 'write');
 		memoryState[write] =
-			getParameterValue(verb, verbMode, memoryState) +
-			getParameterValue(noun, nounMode, memoryState);
+			getParamValue(verb, verbMode, memoryState) +
+			getParamValue(noun, nounMode, memoryState);
 		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.multiply.code) {
-		const [verb, noun, write,] = parameters;
-		const [verbMode, nounMode, writeMode,] = parametersModes;
-		throwIfParameterIsInImmediateMode(writeMode, 'write');
+		const [verb, noun, write,] = params;
+		const [verbMode, nounMode, writeMode,] = paramsModes;
+		throwIfParamIsInImmediateMode(writeMode, 'write');
 		memoryState[write] =
-			getParameterValue(verb, verbMode, memoryState) *
-			getParameterValue(noun, nounMode, memoryState);
+			getParamValue(verb, verbMode, memoryState) *
+			getParamValue(noun, nounMode, memoryState);
 		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.input.code) {
-		const [write,] = parameters;
-		const [writeMode,] = parametersModes;
-		throwIfParameterIsInImmediateMode(writeMode, 'write');
+		const [write,] = params;
+		const [writeMode,] = paramsModes;
+		throwIfParamIsInImmediateMode(writeMode, 'write');
 		const id = await requestTerminalInput('ID');
 		memoryState[write] = id;
 		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.output.code) {
-		const [out,] = parameters;
-		const [outMode,] = parametersModes;
-
+		const [out,] = params;
+		const [outMode,] = paramsModes;
 		const output =
-			getParameterValue(out, outMode, memoryState);
+			getParamValue(out, outMode, memoryState);
 		handleTerminalOutput(output);
 		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.jumpIfTrue.code) {
-		const [verb, jumpTo,] = parameters;
-		const [verbMode, jumpToMode,] = parametersModes;
-		if (getParameterValue(verb, verbMode, memoryState) !== 0) {
-			return getParameterValue(jumpTo, jumpToMode, memoryState);
+		const [verb, jumpTo,] = params;
+		const [verbMode, jumpToMode,] = paramsModes;
+		if (getParamValue(verb, verbMode, memoryState) !== 0) {
+			return getParamValue(jumpTo, jumpToMode, memoryState);
 		}
 		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.jumpIfFalse.code) {
-		const [verb, jumpTo,] = parameters;
-		const [verbMode, jumpToMode,] = parametersModes;
-		if (getParameterValue(verb, verbMode, memoryState) === 0) {
-			return getParameterValue(jumpTo, jumpToMode, memoryState);
+		const [verb, jumpTo,] = params;
+		const [verbMode, jumpToMode,] = paramsModes;
+		if (getParamValue(verb, verbMode, memoryState) === 0) {
+			return getParamValue(jumpTo, jumpToMode, memoryState);
 		}
 		return instructionPtr + operation.length;
 	};
 
 	if (operation.code === OPERATIONS.lessThan.code) {
-		const [verb, noun, write,] = parameters;
-		const [verbMode, nounMode, writeMode,] = parametersModes;
-		throwIfParameterIsInImmediateMode(writeMode, 'write');
+		const [verb, noun, write,] = params;
+		const [verbMode, nounMode, writeMode,] = paramsModes;
+		throwIfParamIsInImmediateMode(writeMode, 'write');
 		const isLessThan =
-			getParameterValue(verb, verbMode, memoryState) <
-			getParameterValue(noun, nounMode, memoryState);
-
+			getParamValue(verb, verbMode, memoryState) <
+			getParamValue(noun, nounMode, memoryState);
 		memoryState[write] = isLessThan ? 1 : 0;
-
 		return instructionPtr + operation.length;
 	}
 
 	if (operation.code === OPERATIONS.equals.code) {
-		const [verb, noun, write,] = parameters;
-		const [verbMode, nounMode, writeMode,] = parametersModes;
-		throwIfParameterIsInImmediateMode(writeMode, 'write');
+		const [verb, noun, write,] = params;
+		const [verbMode, nounMode, writeMode,] = paramsModes;
+		throwIfParamIsInImmediateMode(writeMode, 'write');
 		const equals =
-			getParameterValue(verb, verbMode, memoryState) ===
-			getParameterValue(noun, nounMode, memoryState);
+			getParamValue(verb, verbMode, memoryState) ===
+			getParamValue(noun, nounMode, memoryState);
 
 		memoryState[write] = equals ? 1 : 0;
-
 		return instructionPtr + operation.length;
 	}
 
@@ -259,16 +255,16 @@ const handleOperation = async (
 	throw new Error('Unhandled operation code');
 };
 
-const getParameterValue = (parameter, parameterMode, memoryState) => {
-	return parameterMode === PARAMETER_MODES.immediate ?
-		parameter :
-		memoryState[parameter];
+const getParamValue = (param, paramMode, memoryState) => {
+	return paramMode === PARAMETER_MODES.immediate ?
+		param :
+		memoryState[param];
 };
 
-const throwIfParameterIsInImmediateMode = (parameterMode, parameterName) => {
-	if (parameterMode === PARAMETER_MODES.immediate) {
+const throwIfParamIsInImmediateMode = (paramMode, paramName) => {
+	if (paramMode === PARAMETER_MODES.immediate) {
 		throw new Error(
-			`Parameter can not be in immediate mode: ${parameterName}`
+			`Param can not be in immediate mode: ${paramName}`
 		);
 	}
 };
