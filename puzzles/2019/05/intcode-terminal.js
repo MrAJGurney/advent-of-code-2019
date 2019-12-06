@@ -172,9 +172,7 @@ const handleOperation = async (
 	if (operation.code === OPERATIONS.add.code) {
 		const [verb, noun, write,] = parameters;
 		const [verbMode, nounMode, writeMode,] = parametersModes;
-		if (writeMode === PARAMETER_MODES.immediate) {
-			throw new Error('Out parameter can not be in immediate mode');
-		}
+		throwIfParameterIsInImmediateMode(writeMode, 'write');
 		memoryState[write] =
 			getParameterValue(verb, verbMode, memoryState) +
 			getParameterValue(noun, nounMode, memoryState);
@@ -184,9 +182,7 @@ const handleOperation = async (
 	if (operation.code === OPERATIONS.multiply.code) {
 		const [verb, noun, write,] = parameters;
 		const [verbMode, nounMode, writeMode,] = parametersModes;
-		if (writeMode === PARAMETER_MODES.immediate) {
-			throw new Error('Out parameter can not be in immediate mode');
-		}
+		throwIfParameterIsInImmediateMode(writeMode, 'write');
 		memoryState[write] =
 			getParameterValue(verb, verbMode, memoryState) *
 			getParameterValue(noun, nounMode, memoryState);
@@ -196,9 +192,7 @@ const handleOperation = async (
 	if (operation.code === OPERATIONS.input.code) {
 		const [write,] = parameters;
 		const [writeMode,] = parametersModes;
-		if (writeMode === PARAMETER_MODES.immediate) {
-			throw new Error('Out parameter can not be in immediate mode');
-		}
+		throwIfParameterIsInImmediateMode(writeMode, 'write');
 		const id = await requestTerminalInput('ID');
 		memoryState[write] = id;
 		return instructionPtr + operation.length;
@@ -235,9 +229,7 @@ const handleOperation = async (
 	if (operation.code === OPERATIONS.lessThan.code) {
 		const [verb, noun, write,] = parameters;
 		const [verbMode, nounMode, writeMode,] = parametersModes;
-		if (writeMode === PARAMETER_MODES.immediate) {
-			throw new Error('Out parameter can not be in immediate mode');
-		}
+		throwIfParameterIsInImmediateMode(writeMode, 'write');
 		const isLessThan =
 			getParameterValue(verb, verbMode, memoryState) <
 			getParameterValue(noun, nounMode, memoryState);
@@ -250,9 +242,7 @@ const handleOperation = async (
 	if (operation.code === OPERATIONS.equals.code) {
 		const [verb, noun, write,] = parameters;
 		const [verbMode, nounMode, writeMode,] = parametersModes;
-		if (writeMode === PARAMETER_MODES.immediate) {
-			throw new Error('Out parameter can not be in immediate mode');
-		}
+		throwIfParameterIsInImmediateMode(writeMode, 'write');
 		const equals =
 			getParameterValue(verb, verbMode, memoryState) ===
 			getParameterValue(noun, nounMode, memoryState);
@@ -273,6 +263,14 @@ const getParameterValue = (parameter, parameterMode, memoryState) => {
 	return parameterMode === PARAMETER_MODES.immediate ?
 		parameter :
 		memoryState[parameter];
+};
+
+const throwIfParameterIsInImmediateMode = (parameterMode, parameterName) => {
+	if (parameterMode === PARAMETER_MODES.immediate) {
+		throw new Error(
+			`Parameter can not be in immediate mode: ${parameterName}`
+		);
+	}
 };
 
 module.exports = {
