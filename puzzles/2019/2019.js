@@ -19,4 +19,8 @@ module.exports = {
 		title: 'Sunny with a Chance of Asteroids',
 		stars: require('./05/05'),
 	},
+	'6': {
+		title: 'Universal Orbit Map',
+		stars: require('./06/06'),
+	},
 };
