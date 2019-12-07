@@ -37,8 +37,26 @@ const solveWithExecutionTime = async solver => {
 	const highResolutionTimeStart = process.hrtime();
 	const solution = await solver();
 	const [seconds, nanoseconds,] = process.hrtime(highResolutionTimeStart);
-	const milliseconds = Math.ceil(nanoseconds / 1000);
-	return { solution, executionTime: { seconds, milliseconds, }, };
+	const totalElapsedNanoseconds = (seconds* Math.pow(1000, 3)) + nanoseconds;
+	const totalElapsedMicroseconds =
+		Math.round(totalElapsedNanoseconds / Math.pow(1000, 1));
+	const totalElapsedMilliseconds =
+		Math.round(totalElapsedNanoseconds / Math.pow(1000, 2));
+	const totalElapsedSeconds =
+		Math.round(totalElapsedNanoseconds / Math.pow(1000, 3));
+	const totalElapsedMinutes =
+		Math.round(totalElapsedNanoseconds / (Math.pow(1000, 3) * 60));
+
+	return {
+		solution,
+		executionTime: {
+			minutes: totalElapsedMinutes,
+			seconds: totalElapsedSeconds,
+			milliseconds: totalElapsedMilliseconds,
+			microseconds: totalElapsedMicroseconds,
+			nanoseconds: totalElapsedNanoseconds,
+		},
+	};
 };
 
 adventOfCode();
