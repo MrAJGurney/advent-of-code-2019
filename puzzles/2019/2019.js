@@ -23,4 +23,8 @@ module.exports = {
 		title: 'Universal Orbit Map',
 		stars: require('./06/06'),
 	},
+	'7': {
+		title: 'Amplification Circuit ',
+		stars: require('./07/07'),
+	},
 };
