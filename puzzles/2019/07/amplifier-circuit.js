@@ -1,10 +1,5 @@
 const {
-	buildInputProvider,
-	buildOutputHandler,
-} = require('./intcode-computer-interactions');
-
-const {
-	runSoftware,
+	IntcodeComputer,
 } = require('./intcode-computer');
 
 const getMaxThrustSignal = software => {
@@ -39,7 +34,7 @@ const getPhaseSettingPermutations = (min, max) => {
 					for (let i4 = min; i4 <= max; i4++ ) {
 						const permutation = [i0, i1, i2, i3, i4,];
 						const permutationHasDuplicates =
-                            new Set(permutation).size !== permutation.length;
+							new Set(permutation).size !== permutation.length;
 						if (!permutationHasDuplicates) {
 							permutations.push(permutation);
 						}
@@ -56,26 +51,12 @@ const getThrustSignal = (software, initialSignal, phaseSettings) => {
 	let signal = initialSignal;
 
 	for (let ampIndex = 0; ampIndex < phaseSettings.length; ampIndex++) {
-		const softwareCopy = JSON.parse(JSON.stringify(software));
+		const computer = new IntcodeComputer(software);
 
-		const inputProvider = buildInputProvider([
-			phaseSettings[ampIndex],
-			signal,
-		]);
-
-		const {
-			handleOutput,
-			getOutput,
-		} = buildOutputHandler();
-
-		runSoftware(
-			softwareCopy,
-			inputProvider,
-			handleOutput
-		);
-
-		const outputs = getOutput();
-		signal = outputs[outputs.length - 1];
+		computer.addInput(signal);
+		computer.addInput(phaseSettings[ampIndex]);
+		computer.runUntilHalt();
+		signal = computer.consumeOutput();
 	}
 
 	return signal;

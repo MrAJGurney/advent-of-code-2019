@@ -14,35 +14,35 @@ const OPERATIONS = {
 		length: 2,
 		handle: args => handleInput(args),
 	},
-	output:  {
+	output: {
 		code: 4,
 		length: 2,
 		handle: args => handleOutput(args),
 	},
-	jumpIfTrue:  {
+	jumpIfTrue: {
 		code: 5,
 		length: 3,
 		handle: args => handleJumpIfTrue(args),
 	},
-	jumpIfFalse:  {
+	jumpIfFalse: {
 		code: 6,
 		length: 3,
 		handle: args => handleJumpIfFalse(args),
 	},
-	lessThan:  {
+	lessThan: {
 		code: 7,
 		length: 4,
 		handle: args => handleLessThan(args),
 	},
-	equals:  {
+	equals: {
 		code: 8,
 		length: 4,
 		handle: args => handleEquals(args),
 	},
-	exit:  {
+	halt: {
 		code: 99,
 		length: 1,
-		handle: args => handleExit(args),
+		handle: args => handleHalt(args),
 	 },
 };
 
@@ -53,148 +53,184 @@ const PARAMETER_MODES = {
 
 const handleAdd = (
 	{
-		state: {
-			memoryState,
-			instructionPtr,
-		},
 		instruction: {
 			operation,
 			params,
 			paramsModes,
+		},
+		softwareIO: {
+			writeMemoryAt,
+			readMemoryAt,
+		},
+		instructionPtrIO: {
+			getInstructionPtr,
+			moveInstructionPtr,
 		},
 	}
 ) => {
 	const [verb, noun, write,] = params;
 	const [verbMode, nounMode, writeMode,] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
-	memoryState[write] =
-        getParamValue(verb, verbMode, memoryState) +
-        getParamValue(noun, nounMode, memoryState);
-	return instructionPtr + operation.length;
+	const value =
+		getParamValue(verb, verbMode, readMemoryAt) +
+		getParamValue(noun, nounMode, readMemoryAt);
+	writeMemoryAt({ ptr: write, value, });
+	moveInstructionPtr(getInstructionPtr() + operation.length);
+	return;
 };
 
 const handleMultiply = (
 	{
-		state: {
-			memoryState,
-			instructionPtr,
-		},
 		instruction: {
 			operation,
 			params,
 			paramsModes,
+		},
+		softwareIO: {
+			writeMemoryAt,
+			readMemoryAt,
+		},
+		instructionPtrIO: {
+			getInstructionPtr,
+			moveInstructionPtr,
 		},
 	}
 ) => {
 	const [verb, noun, write,] = params;
 	const [verbMode, nounMode, writeMode,] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
-	memoryState[write] =
-        getParamValue(verb, verbMode, memoryState) *
-        getParamValue(noun, nounMode, memoryState);
-	return instructionPtr + operation.length;
+	const value =
+		getParamValue(verb, verbMode, readMemoryAt) *
+		getParamValue(noun, nounMode, readMemoryAt);
+	writeMemoryAt({ ptr: write, value, });
+	moveInstructionPtr(getInstructionPtr() + operation.length);
+	return;
 };
 
 const handleInput = (
 	{
-		state: {
-			memoryState,
-			instructionPtr,
-		},
 		instruction: {
 			operation,
 			params,
 			paramsModes,
 		},
-		terminalIO: {
-			requestTerminalInput,
+		softwareIO: {
+			writeMemoryAt,
+		},
+		instructionPtrIO: {
+			getInstructionPtr,
+			moveInstructionPtr,
+		},
+		storageIO: {
+			consumeInput,
 		},
 	}
 ) => {
 	const [write,] = params;
 	const [writeMode,] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
-	const id = requestTerminalInput('ID');
-	memoryState[write] = id;
-	return instructionPtr + operation.length;
+	const input = consumeInput();
+	writeMemoryAt({ ptr: write, value: input, });
+	moveInstructionPtr(getInstructionPtr() + operation.length);
+	return;
 };
 
 const handleOutput = (
 	{
-		state: {
-			memoryState,
-			instructionPtr,
-		},
 		instruction: {
 			operation,
 			params,
 			paramsModes,
 		},
-		terminalIO: {
-			handleTerminalOutput,
+		softwareIO: {
+			readMemoryAt,
+		},
+		instructionPtrIO: {
+			getInstructionPtr,
+			moveInstructionPtr,
+		},
+		storageIO: {
+			addOutput,
 		},
 	}
 ) => {
 	const [out,] = params;
 	const [outMode,] = paramsModes;
 	const output =
-        getParamValue(out, outMode, memoryState);
-	handleTerminalOutput(output);
-	return instructionPtr + operation.length;
+		getParamValue(out, outMode, readMemoryAt);
+	addOutput(output);
+	moveInstructionPtr(getInstructionPtr() + operation.length);
+	return;
 };
 
 const handleJumpIfTrue = (
 	{
-		state: {
-			memoryState,
-			instructionPtr,
-		},
 		instruction: {
 			operation,
 			params,
 			paramsModes,
 		},
+		softwareIO: {
+			readMemoryAt,
+		},
+		instructionPtrIO: {
+			getInstructionPtr,
+			moveInstructionPtr,
+		},
 	}
 ) => {
 	const [verb, jumpTo,] = params;
 	const [verbMode, jumpToMode,] = paramsModes;
-	if (getParamValue(verb, verbMode, memoryState) !== 0) {
-		return getParamValue(jumpTo, jumpToMode, memoryState);
-	}
-	return instructionPtr + operation.length;
+	const shouldJump = getParamValue(verb, verbMode, readMemoryAt) !== 0;
+	moveInstructionPtr(
+		shouldJump ?
+			getParamValue(jumpTo, jumpToMode, readMemoryAt) :
+			getInstructionPtr() + operation.length
+	);
+	return;
 };
 
 const handleJumpIfFalse = (
 	{
-		state: {
-			memoryState,
-			instructionPtr,
-		},
 		instruction: {
 			operation,
 			params,
 			paramsModes,
+		},
+		softwareIO: {
+			readMemoryAt,
+		},
+		instructionPtrIO: {
+			getInstructionPtr,
+			moveInstructionPtr,
 		},
 	}
 ) => {
 	const [verb, jumpTo,] = params;
 	const [verbMode, jumpToMode,] = paramsModes;
-	if (getParamValue(verb, verbMode, memoryState) === 0) {
-		return getParamValue(jumpTo, jumpToMode, memoryState);
-	}
-	return instructionPtr + operation.length;
+	const shouldJump = getParamValue(verb, verbMode, readMemoryAt) === 0;
+	moveInstructionPtr(
+		shouldJump ?
+			getParamValue(jumpTo, jumpToMode, readMemoryAt) :
+			getInstructionPtr() + operation.length
+	);
+	return;
 };
 
 const handleLessThan = (
 	{
-		state: {
-			memoryState,
-			instructionPtr,
-		},
 		instruction: {
 			operation,
 			params,
 			paramsModes,
+		},
+		softwareIO: {
+			writeMemoryAt,
+			readMemoryAt,
+		},
+		instructionPtrIO: {
+			getInstructionPtr,
+			moveInstructionPtr,
 		},
 	}
 ) => {
@@ -202,22 +238,29 @@ const handleLessThan = (
 	const [verbMode, nounMode, writeMode,] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const isLessThan =
-        getParamValue(verb, verbMode, memoryState) <
-        getParamValue(noun, nounMode, memoryState);
-	memoryState[write] = isLessThan ? 1 : 0;
-	return instructionPtr + operation.length;
+		getParamValue(verb, verbMode, readMemoryAt) <
+		getParamValue(noun, nounMode, readMemoryAt);
+	writeMemoryAt({
+		ptr: write,
+		value: isLessThan ? 1 : 0, });
+	moveInstructionPtr(getInstructionPtr() + operation.length);
+	return;
 };
 
 const handleEquals = (
 	{
-		state: {
-			memoryState,
-			instructionPtr,
-		},
 		instruction: {
 			operation,
 			params,
 			paramsModes,
+		},
+		softwareIO: {
+			writeMemoryAt,
+			readMemoryAt,
+		},
+		instructionPtrIO: {
+			getInstructionPtr,
+			moveInstructionPtr,
 		},
 	}
 ) => {
@@ -225,30 +268,34 @@ const handleEquals = (
 	const [verbMode, nounMode, writeMode,] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const equals =
-        getParamValue(verb, verbMode, memoryState) ===
-        getParamValue(noun, nounMode, memoryState);
-
-	memoryState[write] = equals ? 1 : 0;
-	return instructionPtr + operation.length;
+		getParamValue(verb, verbMode, readMemoryAt) ===
+		getParamValue(noun, nounMode, readMemoryAt);
+	writeMemoryAt({
+		ptr: write,
+		value: equals ? 1 : 0, });
+	moveInstructionPtr(getInstructionPtr() + operation.length);
+	return;
 };
 
-const handleExit = (
+const handleHalt = (
 	{
-		state: {
-			instructionPtr,
-		},
 		instruction: {
 			operation,
 		},
+		instructionPtrIO: {
+			getInstructionPtr,
+			moveInstructionPtr,
+		},
 	}
 ) => {
-	return instructionPtr + operation.length;
+	moveInstructionPtr(getInstructionPtr() + operation.length);
+	return;
 };
 
-const getParamValue = (param, paramMode, memoryState) => {
+const getParamValue = (param, paramMode, readMemoryAt) => {
 	return paramMode === PARAMETER_MODES.immediate ?
 		param :
-		memoryState[param];
+		readMemoryAt({ ptr: param, });
 };
 
 const throwIfParamIsInImmediateMode = (paramMode, paramName) => {

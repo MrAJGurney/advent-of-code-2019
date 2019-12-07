@@ -12,7 +12,7 @@ const OPERATIONS = {
 	input: {
 		code: 3,
 		length: 2,
-		handle: async args => await handleInput(args),
+		handle: args => handleInput(args),
 	},
 	output:  {
 		code: 4,
@@ -95,7 +95,7 @@ const handleMultiply = (
 	return instructionPtr + operation.length;
 };
 
-const handleInput = async (
+const handleInput = (
 	{
 		state: {
 			memoryState,
@@ -114,7 +114,7 @@ const handleInput = async (
 	const [write,] = params;
 	const [writeMode,] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
-	const id = await requestTerminalInput('ID');
+	const id = requestTerminalInput('ID');
 	memoryState[write] = id;
 	return instructionPtr + operation.length;
 };
