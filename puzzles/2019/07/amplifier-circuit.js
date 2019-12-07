@@ -2,6 +2,8 @@ const {
 	IntcodeComputer,
 } = require('./intcode-computer');
 
+const { OPERATIONS, } = require('./operations');
+
 const getMaxThrustSignal = software => {
 	const initialSignal = 0;
 	const minPhaseSetting = 0;
@@ -16,6 +18,28 @@ const getMaxThrustSignal = software => {
 
 	phaseSettingPermutations.forEach(permutation => {
 		const thrustSignal = getThrustSignal(
+			software, initialSignal, permutation
+		);
+		maxThrustSignal = Math.max(maxThrustSignal, thrustSignal);
+	});
+
+	return maxThrustSignal;
+};
+
+const getMaxThrustSignalWithFeedback = software => {
+	const initialSignal = 0;
+	const minPhaseSetting = 5;
+	const maxPhaseSetting = 9;
+
+	const phaseSettingPermutations =
+		getPhaseSettingPermutations(minPhaseSetting, maxPhaseSetting);
+
+	let maxThrustSignal = getThrustSignalWithFeedback(
+		software, initialSignal, phaseSettingPermutations[0]
+	);
+
+	phaseSettingPermutations.forEach(permutation => {
+		const thrustSignal = getThrustSignalWithFeedback(
 			software, initialSignal, permutation
 		);
 		maxThrustSignal = Math.max(maxThrustSignal, thrustSignal);
@@ -51,12 +75,41 @@ const getThrustSignal = (software, initialSignal, phaseSettings) => {
 	let signal = initialSignal;
 
 	for (let ampIndex = 0; ampIndex < phaseSettings.length; ampIndex++) {
-		const computer = new IntcodeComputer(software);
+		const amplifier = new IntcodeComputer(software);
+		amplifier.addInput(phaseSettings[ampIndex]);
+		amplifier.addInput(signal);
+		amplifier.runUntilAfter([OPERATIONS.halt.code,]);
+		signal = amplifier.consumeOutput();
+	}
 
-		computer.addInput(signal);
-		computer.addInput(phaseSettings[ampIndex]);
-		computer.runUntilHalt();
-		signal = computer.consumeOutput();
+	return signal;
+};
+
+const getThrustSignalWithFeedback = (
+	software,
+	initialSignal,
+	phaseSettings
+) => {
+	const amplifiers = [];
+	for (let ampIndex = 0; ampIndex < phaseSettings.length; ampIndex++) {
+		const amplifier = new IntcodeComputer(software);
+		amplifier.addInput(phaseSettings[ampIndex]);
+		amplifiers.push(amplifier);
+	}
+
+	let signal = initialSignal;
+	let ampIndex = 0;
+	let finalOperationCode = null;
+	while (true) {
+		const amplifier = amplifiers[ampIndex];
+		amplifier.addInput(signal);
+		finalOperationCode = amplifier
+			.runUntilAfter([OPERATIONS.halt.code, OPERATIONS.output.code,]);
+		if (finalOperationCode === OPERATIONS.halt.code) {
+			break;
+		}
+		signal = amplifier.consumeOutput();
+		ampIndex = (ampIndex + 1) % amplifiers.length;
 	}
 
 	return signal;
@@ -64,4 +117,5 @@ const getThrustSignal = (software, initialSignal, phaseSettings) => {
 
 module.exports = {
 	getMaxThrustSignal,
+	getMaxThrustSignalWithFeedback,
 };

@@ -1,5 +1,6 @@
 const {
 	getMaxThrustSignal,
+	getMaxThrustSignalWithFeedback,
 } = require('./amplifier-circuit');
 const {
 	readIntcodeSoftwareFromFile,
@@ -7,13 +8,17 @@ const {
 
 const solveFirstChallenge = () => {
 	const software = readIntcodeSoftwareFromFile();
-
 	return getMaxThrustSignal(
 		software
 	);
 };
 
-const solveSecondChallenge = () => {};
+const solveSecondChallenge = () => {
+	const software = readIntcodeSoftwareFromFile();
+	return getMaxThrustSignalWithFeedback(
+		software
+	);
+};
 
 module.exports = {
 	'1': solveFirstChallenge,

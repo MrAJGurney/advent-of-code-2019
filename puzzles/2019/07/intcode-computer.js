@@ -4,9 +4,8 @@ class IntcodeComputer {
 	constructor(software) {
 		this._memory = JSON.parse(JSON.stringify(software));
 		this._instructionPtr = 0;
-		this._inputBuffer = [];
-		this._outputBuffer = [];
-		this._halted = false;
+		this._inputQueue = [];
+		this._outputHeap = [];
 	}
 
 	writeMemoryAt({ value, ptr, }) {
@@ -27,30 +26,30 @@ class IntcodeComputer {
 	}
 
 	addInput(input) {
-		this._inputBuffer.push(input);
+		this._inputQueue.push(input);
 		return;
 	}
 
 	consumeInput() {
-		if (this._inputBuffer.length === 0) {
+		if (this._inputQueue.length === 0) {
 			throw new Error('Expected input, but nothing found');
 		}
-		return this._inputBuffer.pop();
+		return this._inputQueue.shift();
 	}
 
 	addOutput(output) {
-		this._outputBuffer.push(output);
+		this._outputHeap.push(output);
 		return;
 	}
 
 	consumeOutput() {
-		if (this._outputBuffer.length === 0) {
+		if (this._outputHeap.length === 0) {
 			throw new Error('Expected output, but nothing found');
 		}
-		return this._outputBuffer.pop();
+		return this._outputHeap.pop();
 	}
 
-	runUntilHalt() {
+	runUntilAfter(finalOperationCodes) {
 		while(true) {
 			const instruction = this.readMemoryAt(
 				{ ptr: this.getInstructionPtr(), });
@@ -60,7 +59,34 @@ class IntcodeComputer {
 				paramsModes,
 			} = this._deconstructInstruction(instruction);
 
-			if (operation.code === OPERATIONS.halt.code)
+			this._handleOperation(
+				{
+					instruction: {
+						operation,
+						params,
+						paramsModes,
+					},
+				}
+			);
+
+			if (finalOperationCodes.includes(operation.code))
+			{
+				return operation.code;
+			}
+		}
+	}
+
+	runUntilOutput() {
+		while(true) {
+			const instruction = this.readMemoryAt(
+				{ ptr: this.getInstructionPtr(), });
+			const {
+				operation,
+				params,
+				paramsModes,
+			} = this._deconstructInstruction(instruction);
+
+			if (operation.code === OPERATIONS.output.code)
 			{
 				this.halted = true;
 				break;
