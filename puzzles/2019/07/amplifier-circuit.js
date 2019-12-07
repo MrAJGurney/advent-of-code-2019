@@ -9,8 +9,11 @@ const {
 
 const getMaxThrustSignal = software => {
 	const initialSignal = 0;
+	const minPhaseSetting = 0;
+	const maxPhaseSetting = 4;
 
-	const phaseSettingPermutations = getPhaseSettingPermutations();
+	const phaseSettingPermutations =
+		getPhaseSettingPermutations(minPhaseSetting, maxPhaseSetting);
 
 	let maxThrustSignal = getThrustSignal(
 		software, initialSignal, phaseSettingPermutations[0]
@@ -26,14 +29,14 @@ const getMaxThrustSignal = software => {
 	return maxThrustSignal;
 };
 
-const getPhaseSettingPermutations = () => {
+const getPhaseSettingPermutations = (min, max) => {
 	const permutations = [];
 
-	for (let i0 = 0; i0 < 5; i0++ ) {
-		for (let i1 = 0; i1 < 5; i1++ ) {
-			for (let i2 = 0; i2 < 5; i2++ ) {
-				for (let i3 = 0; i3 < 5; i3++ ) {
-					for (let i4 = 0; i4 < 5; i4++ ) {
+	for (let i0 = min; i0 <= max; i0++ ) {
+		for (let i1 = min; i1 <= max; i1++ ) {
+			for (let i2 = min; i2 <= max; i2++ ) {
+				for (let i3 = min; i3 <= max; i3++ ) {
+					for (let i4 = min; i4 <= max; i4++ ) {
 						const permutation = [i0, i1, i2, i3, i4,];
 						const permutationHasDuplicates =
                             new Set(permutation).size !== permutation.length;
