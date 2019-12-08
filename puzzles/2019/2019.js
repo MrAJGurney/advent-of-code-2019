@@ -24,7 +24,11 @@ module.exports = {
 		stars: require('./06/06'),
 	},
 	'7': {
-		title: 'Amplification Circuit ',
+		title: 'Amplification Circuit',
 		stars: require('./07/07'),
+	},
+	'8': {
+		title: 'Space Image Format',
+		stars: require('./08/08'),
 	},
 };
