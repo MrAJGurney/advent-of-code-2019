@@ -8,7 +8,7 @@ My attempt at the [advent of code](https://adventofcode.com/)
 
 Put the `input.txt` file from advent of code into `puzzles/YEAR/DAY`
 
-- e.g. `puzzles/2019/day-01-the-tyranny-of-the-rocket-equation/input.txt`
+- e.g. `puzzles/2019/01/input.txt`
 
 Run `node advent-of-code [YEAR] [DAY] [STAR-NUMBER]`
 
