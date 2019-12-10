@@ -31,4 +31,8 @@ module.exports = {
 		title: 'Space Image Format',
 		stars: require('./08/08'),
 	},
+	'10': {
+		title: 'Monitoring Station ',
+		stars: require('./10/10'),
+	},
 };
