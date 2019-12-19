@@ -1,12 +1,7 @@
 /* eslint-disable max-len */
 
-const {
-	opcodes,
-} = require('./opcodes');
-
-const {
-	buildIntcodeComputer,
-} = require('./intcode-computer');
+const { buildIntcodeComputer, } = require('./intcode-computer');
+const { operationCodes, } = require('./operation-codes');
 
 describe('day 02 (initial implementation)', () => {
 	describe('reaches the correct final state given an initial state', () => {
@@ -20,7 +15,7 @@ describe('day 02 (initial implementation)', () => {
 		describe.each(scenarios)('when the computer runs', ({ software, endState, }) => {
 			it('ends at the expected end state', () => {
 				const intcodeComputer = buildIntcodeComputer(software);
-				intcodeComputer.runUntil(opcodes.halt);
+				intcodeComputer.runUntil(operationCodes.halt);
 
 				expect(intcodeComputer.software).toStrictEqual(endState);
 			});
@@ -41,11 +36,22 @@ describe('day 03 (I/O, jump-if, less-than/Equals, parameter modes)', () => {
 				it('ends at the expected end state', () => {
 					const intcodeComputer = buildIntcodeComputer(software);
 					intcodeComputer.addToInputQueue(input);
-					intcodeComputer.runUntil(opcodes.halt);
+					intcodeComputer.runUntil(operationCodes.halt);
 
 					expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 				});
 			});
+		});
+	});
+
+	describe('parameter modes', () => {
+		const software = ['1002','4','3','4','33', ];
+		const expected = { value: '99', address:'4', };
+
+		it('stores the expected value in the expected location', () => {
+			const intcodeComputer = buildIntcodeComputer(software);
+			intcodeComputer.runUntil(operationCodes.halt);
+			expect(intcodeComputer.software[expected.address]).toStrictEqual(expected.value);
 		});
 	});
 });

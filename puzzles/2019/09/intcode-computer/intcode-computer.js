@@ -1,4 +1,5 @@
-const { opcodes, } = require('./opcodes');
+const { operationCodes, } = require('./operation-codes');
+const { parameterModeCodes, } = require('./parameter-mode-codes');
 const { buildOperations, } = require('./intcode-operations');
 const { buildRunUntil, } = require('./intcode-runner');
 const { buildAddToInputQueue, } = require('./intcode-io-handler');
@@ -7,11 +8,15 @@ const buildIntcodeComputer = software => {
 	const self = {
 		software: copySoftware(software),
 		instructionPtr: 0,
-		currentOpcode: null,
+		currentOperationCode: null,
 		outputHeap: [],
 		inputQueue: [],
 	};
-	const operations = buildOperations(self, opcodes);
+	const operations = buildOperations(
+		self,
+		operationCodes,
+		parameterModeCodes
+	);
 	const runUntil = buildRunUntil(self, operations);
 	const addToInputQueue = buildAddToInputQueue(self);
 

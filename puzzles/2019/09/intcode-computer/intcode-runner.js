@@ -1,8 +1,8 @@
-const buildRunUntil = (self, operations) =>   finalOpcode => {
+const buildRunUntil = (self, operations) => finalOperationCode => {
 	while(true) {
 		updateCurrentInstruction(self)();
 		handleCurrentInstruction(self, operations)();
-		if (self.currentOpcode === finalOpcode)
+		if (self.currentOperationCode === finalOperationCode)
 		{
 			return operations.code;
 		}
@@ -20,21 +20,22 @@ const updateCurrentOperation = self => () => {
 		software,
 	} = self;
 
-	const opcode = software[instructionPtr];
+	let operationCode = software[instructionPtr].slice(-2);
+	operationCode = '0'.repeat(2 - operationCode.length) + operationCode;
 
-	self.currentOpcode = opcode;
+	self.currentOperationCode = operationCode;
 	return;
 };
 
 const handleCurrentInstruction = (self, operations) => () => {
-	const { currentOpcode, } = self;
-	const handleOpcode = operations.get(currentOpcode);
+	const { currentOperationCode, } = self;
+	const handleOperationCode = operations.get(currentOperationCode);
 
-	if (typeof handleOpcode !== 'function') {
+	if (typeof handleOperationCode !== 'function') {
 		throw new Error('Unhandled operation code');
 	}
 
-	handleOpcode();
+	handleOperationCode();
 	return;
 };
 
