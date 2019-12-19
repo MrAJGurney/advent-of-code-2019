@@ -1,9 +1,9 @@
 const buildOperations = (self, opcodes) => new Map([
-	[opcodes.add, () => handleAdd(self)(),],
-	[opcodes.multiply, () => handleMultiply(self)(),],
-	[opcodes.input, () => handleInput(self)(),],
-	[opcodes.output, () => handleOutput(self)(),],
-	[opcodes.halt, () => handleHalt(self)(),],
+	[opcodes.add, handleAdd(self),],
+	[opcodes.multiply, handleMultiply(self),],
+	[opcodes.input, handleInput(self),],
+	[opcodes.output, handleOutput(self),],
+	[opcodes.halt, handleHalt(self),],
 ]);
 
 const handleAdd = self => () => {
