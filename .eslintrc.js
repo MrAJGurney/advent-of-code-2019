@@ -40,7 +40,7 @@ module.exports = {
 			{ 'skipBlankLines': false,
 				'ignoreComments': false, },
 		],
-		'no-unused-vars': ['error',],
+		'no-unused-vars': ['error',{ 'varsIgnorePattern': '^_$', },],
 		'no-var': [
 			'error',
 		],
