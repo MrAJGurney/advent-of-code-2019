@@ -6,11 +6,13 @@ const buildOperations = (self, operationCodes, parameterModeCodes) => {
 		[operationCodes.multiply, handleMultiply(self, getParamsValue),],
 		[operationCodes.input, handleInput(self),],
 		[operationCodes.output, handleOutput(self, getParamsValue),],
+		[operationCodes.lessThan, handleLessThan(self, getParamsValue),],
+		[operationCodes.equals, handleEquals(self, getParamsValue),],
 		[operationCodes.halt, handleHalt(self),],
 	]);
 };
 
-const handleAdd = (self, getParamsValue)=> () => {
+const handleAdd = (self, getParamsValue) => () => {
 	const {
 		software,
 		instructionPtr,
@@ -26,7 +28,7 @@ const handleAdd = (self, getParamsValue)=> () => {
 	return;
 };
 
-const handleMultiply = (self, getParamsValue)=> () => {
+const handleMultiply = (self, getParamsValue) => () => {
 	const {
 		software,
 		instructionPtr,
@@ -58,7 +60,7 @@ const handleInput = self=> () => {
 	return;
 };
 
-const handleOutput = (self, getParamsValue)=> () => {
+const handleOutput = (self, getParamsValue) => () => {
 	const {
 		software,
 		instructionPtr,
@@ -72,7 +74,41 @@ const handleOutput = (self, getParamsValue)=> () => {
 	return;
 };
 
-const handleHalt = self=> () => {
+const handleLessThan = (self, getParamsValue) => () => {
+	const {
+		software,
+		instructionPtr,
+	} = self;
+
+	const [_, verb, noun, write,] = software.slice(instructionPtr);
+	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
+
+	const isLessThan = parseInt(verbValue) < parseInt(nounValue);
+	const valueToWrite = isLessThan ? '1' : '0';
+
+	self.software[write] = valueToWrite;
+	self.instructionPtr += 4;
+	return;
+};
+
+const handleEquals = (self, getParamsValue) => () => {
+	const {
+		software,
+		instructionPtr,
+	} = self;
+
+	const [_, verb, noun, write,] = software.slice(instructionPtr);
+	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
+
+	const isEqual = parseInt(verbValue) === parseInt(nounValue);
+	const valueToWrite = isEqual ? '1' : '0';
+
+	self.software[write] = valueToWrite;
+	self.instructionPtr += 4;
+	return;
+};
+
+const handleHalt = self => () => {
 	self.instructionPtr += 1;
 	return;
 };

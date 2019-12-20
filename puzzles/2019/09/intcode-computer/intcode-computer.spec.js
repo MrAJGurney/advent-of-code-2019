@@ -33,7 +33,7 @@ describe('day 03 (I/O, jump-if, less-than/Equals, parameter modes)', () => {
 			];
 
 			describe.each(states)('when the computer runs', ({ software, input, expectedOutput, }) => {
-				it('ends at the expected end state', () => {
+				it('has the expected output', () => {
 					const intcodeComputer = buildIntcodeComputer(software);
 					intcodeComputer.addToInputQueue(input);
 					intcodeComputer.runUntil(operationCodes.halt);
@@ -52,6 +52,56 @@ describe('day 03 (I/O, jump-if, less-than/Equals, parameter modes)', () => {
 			const intcodeComputer = buildIntcodeComputer(software);
 			intcodeComputer.runUntil(operationCodes.halt);
 			expect(intcodeComputer.software[expected.address]).toStrictEqual(expected.value);
+		});
+	});
+
+	describe('lessThan', () => {
+		describe('has the expected output', () => {
+			const states =[
+				// position mode - less than 8
+				{ software: ['3','9','7','9','10','9','4','9','99','-1','8', ], input: '8', expectedOutput: ['0',], },
+				{ software: ['3','9','7','9','10','9','4','9','99','-1','8', ], input: '4', expectedOutput: ['1',], },
+				{ software: ['3','9','7','9','10','9','4','9','99','-1','8', ], input: '9', expectedOutput: ['0',], },
+				// immediate mode - less than to 8
+				{ software: ['3','3','1107','-1','8','3','4','3','99', ], input: '8', expectedOutput: ['0',], },
+				{ software: ['3','3','1107','-1','8','3','4','3','99', ], input: '4', expectedOutput: ['1',], },
+				{ software: ['3','3','1107','-1','8','3','4','3','99', ], input: '9', expectedOutput: ['0',], },
+			];
+
+			describe.each(states)('when the computer runs', ({ software, input, expectedOutput, }) => {
+				it('has the expected output', () => {
+					const intcodeComputer = buildIntcodeComputer(software);
+					intcodeComputer.addToInputQueue(input);
+					intcodeComputer.runUntil(operationCodes.halt);
+
+					expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
+				});
+			});
+		});
+	});
+
+	describe('equals', () => {
+		describe('has the expected output', () => {
+			const states =[
+				// position mode - equal to 8
+				{ software: ['3','9','8','9','10','9','4','9','99','-1','8', ], input: '8', expectedOutput: ['1',], },
+				{ software: ['3','9','8','9','10','9','4','9','99','-1','8', ], input: '4', expectedOutput: ['0',], },
+				{ software: ['3','9','8','9','10','9','4','9','99','-1','8', ], input: '9', expectedOutput: ['0',], },
+				// immediate mode - equal to 8
+				{ software: ['3','3','1108','-1','8','3','4','3','99', ], input: '8', expectedOutput: ['1',], },
+				{ software: ['3','3','1108','-1','8','3','4','3','99', ], input: '4', expectedOutput: ['0',], },
+				{ software: ['3','3','1108','-1','8','3','4','3','99', ], input: '9', expectedOutput: ['0',], },
+			];
+
+			describe.each(states)('when the computer runs', ({ software, input, expectedOutput, }) => {
+				it('has the expected output', () => {
+					const intcodeComputer = buildIntcodeComputer(software);
+					intcodeComputer.addToInputQueue(input);
+					intcodeComputer.runUntil(operationCodes.halt);
+
+					expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
+				});
+			});
 		});
 	});
 });
