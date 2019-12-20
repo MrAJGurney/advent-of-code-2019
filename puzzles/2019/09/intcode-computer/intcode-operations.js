@@ -6,6 +6,8 @@ const buildOperations = (self, operationCodes, parameterModeCodes) => {
 		[operationCodes.multiply, handleMultiply(self, getParamsValue),],
 		[operationCodes.input, handleInput(self),],
 		[operationCodes.output, handleOutput(self, getParamsValue),],
+		[operationCodes.jumpIfTrue, handleJumpIfTrue(self, getParamsValue),],
+		[operationCodes.jumpIfFalse, handleJumpIfFalse(self, getParamsValue),],
 		[operationCodes.lessThan, handleLessThan(self, getParamsValue),],
 		[operationCodes.equals, handleEquals(self, getParamsValue),],
 		[operationCodes.halt, handleHalt(self),],
@@ -71,6 +73,46 @@ const handleOutput = (self, getParamsValue) => () => {
 
 	self.instructionPtr += 2;
 	self.outputHeap.push(verbValue);
+	return;
+};
+
+const handleJumpIfTrue = (self, getParamsValue) => () => {
+	const {
+		software,
+		instructionPtr,
+	} = self;
+
+	const [_, verb, noun,] = software.slice(instructionPtr);
+	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
+
+	const shouldJump = parseInt(verbValue) !== 0;
+
+	if (shouldJump) {
+		self.instructionPtr = parseInt(nounValue);
+		return;
+	}
+
+	self.instructionPtr += 3;
+	return;
+};
+
+const handleJumpIfFalse = (self, getParamsValue) => () => {
+	const {
+		software,
+		instructionPtr,
+	} = self;
+
+	const [_, verb, noun,] = software.slice(instructionPtr);
+	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
+
+	const shouldJump = parseInt(verbValue) === 0;
+
+	if (shouldJump) {
+		self.instructionPtr = parseInt(nounValue);
+		return;
+	}
+
+	self.instructionPtr += 3;
 	return;
 };
 

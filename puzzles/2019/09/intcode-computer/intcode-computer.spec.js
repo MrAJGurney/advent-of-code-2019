@@ -23,7 +23,7 @@ describe('day 02 (initial implementation)', () => {
 	});
 });
 
-describe('day 03 (I/O, jump-if, less-than/Equals, parameter modes)', () => {
+describe('day 03 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 	describe('input and output', () => {
 		describe('has the expected output', () => {
 			const states =[
@@ -55,7 +55,7 @@ describe('day 03 (I/O, jump-if, less-than/Equals, parameter modes)', () => {
 		});
 	});
 
-	describe('lessThan', () => {
+	describe('less-than', () => {
 		describe('has the expected output', () => {
 			const states =[
 				// position mode - less than 8
@@ -91,6 +91,29 @@ describe('day 03 (I/O, jump-if, less-than/Equals, parameter modes)', () => {
 				{ software: ['3','3','1108','-1','8','3','4','3','99', ], input: '8', expectedOutput: ['1',], },
 				{ software: ['3','3','1108','-1','8','3','4','3','99', ], input: '4', expectedOutput: ['0',], },
 				{ software: ['3','3','1108','-1','8','3','4','3','99', ], input: '9', expectedOutput: ['0',], },
+			];
+
+			describe.each(states)('when the computer runs', ({ software, input, expectedOutput, }) => {
+				it('has the expected output', () => {
+					const intcodeComputer = buildIntcodeComputer(software);
+					intcodeComputer.addToInputQueue(input);
+					intcodeComputer.runUntil(operationCodes.halt);
+
+					expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
+				});
+			});
+		});
+	});
+
+	describe('jump-if-true & jump-if-false', () => {
+		describe('has the expected output', () => {
+			const states =[
+				{ software: ['3','12','6','12','15','1','13','14','13','4','13','99','-1','0','1','9',], input: '0', expectedOutput: ['0',], },
+				{ software: ['3','12','6','12','15','1','13','14','13','4','13','99','-1','0','1','9',], input: '3', expectedOutput: ['1',], },
+				{ software: ['3','12','6','12','15','1','13','14','13','4','13','99','-1','0','1','9',], input: '-2', expectedOutput: ['1',], },
+				{ software: ['3','3','1105','-1','9','1101','0','0','12','4','12','99','1',], input: '0', expectedOutput: ['0',], },
+				{ software: ['3','3','1105','-1','9','1101','0','0','12','4','12','99','1',], input: '3', expectedOutput: ['1',], },
+				{ software: ['3','3','1105','-1','9','1101','0','0','12','4','12','99','1',], input: '-2', expectedOutput: ['1',], },
 			];
 
 			describe.each(states)('when the computer runs', ({ software, input, expectedOutput, }) => {
