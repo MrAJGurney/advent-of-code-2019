@@ -23,7 +23,7 @@ const handleAdd = (self, getParamsValue) => () => {
 	const [_, verb, noun, write,] = software.slice(instructionPtr);
 	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
 
-	const valueToWrite = parseInt(verbValue) + parseInt(nounValue);
+	const valueToWrite = BigInt(verbValue) + BigInt(nounValue);
 
 	self.software[write] = valueToWrite.toString();
 	self.instructionPtr += 4;
@@ -39,7 +39,7 @@ const handleMultiply = (self, getParamsValue) => () => {
 	const [_, verb, noun, write,] = software.slice(instructionPtr);
 	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
 
-	const valueToWrite = parseInt(verbValue) * parseInt(nounValue);
+	const valueToWrite = BigInt(verbValue) * BigInt(nounValue);
 
 	self.software[write] = valueToWrite.toString();
 	self.instructionPtr += 4;
@@ -85,7 +85,7 @@ const handleJumpIfTrue = (self, getParamsValue) => () => {
 	const [_, verb, noun,] = software.slice(instructionPtr);
 	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
 
-	const shouldJump = parseInt(verbValue) !== 0;
+	const shouldJump = BigInt(verbValue) !== BigInt(0);
 
 	if (shouldJump) {
 		self.instructionPtr = parseInt(nounValue);
@@ -105,7 +105,7 @@ const handleJumpIfFalse = (self, getParamsValue) => () => {
 	const [_, verb, noun,] = software.slice(instructionPtr);
 	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
 
-	const shouldJump = parseInt(verbValue) === 0;
+	const shouldJump = BigInt(verbValue) === BigInt(0);
 
 	if (shouldJump) {
 		self.instructionPtr = parseInt(nounValue);
@@ -125,7 +125,7 @@ const handleLessThan = (self, getParamsValue) => () => {
 	const [_, verb, noun, write,] = software.slice(instructionPtr);
 	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
 
-	const isLessThan = parseInt(verbValue) < parseInt(nounValue);
+	const isLessThan = BigInt(verbValue) < BigInt(nounValue);
 	const valueToWrite = isLessThan ? '1' : '0';
 
 	self.software[write] = valueToWrite;
@@ -142,7 +142,7 @@ const handleEquals = (self, getParamsValue) => () => {
 	const [_, verb, noun, write,] = software.slice(instructionPtr);
 	const [verbValue, nounValue,] = getParamsValue([verb, noun,]);
 
-	const isEqual = parseInt(verbValue) === parseInt(nounValue);
+	const isEqual = BigInt(verbValue) === BigInt(nounValue);
 	const valueToWrite = isEqual ? '1' : '0';
 
 	self.software[write] = valueToWrite;
