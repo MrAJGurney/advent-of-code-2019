@@ -23,7 +23,7 @@ describe('day 02 (initial implementation)', () => {
 	});
 });
 
-describe('day 03 (I/O, jump-if, less-than/equals, parameter modes)', () => {
+describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 	describe('input and output', () => {
 		describe('has the expected output', () => {
 			const states =[
@@ -124,6 +124,33 @@ describe('day 03 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 
 					expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 				});
+			});
+		});
+	});
+
+	describe('combined features', () => {
+		const software = [
+			'3','21','1008','21','8','20','1005','20','22','107','8','21',
+			'20','1006','20','31','1106','0','36','98','0','0','1002','21',
+			'125','20','4','20','1105','1','46','104','999','1105','1',
+			'46','1101','1000','1','20','4','20','1105','1','46','98','99',
+		];
+
+		const states =[
+			{ input: '-2', expectedOutput: ['999',], },
+			{ input: '4', expectedOutput: ['999',], },
+			{ input: '8', expectedOutput: ['1000',], },
+			{ input: '9', expectedOutput: ['1001',], },
+			{ input: '88', expectedOutput: ['1001',], },
+		];
+
+		describe.each(states)('when the computer runs', ({ input, expectedOutput, }) => {
+			it('has the expected output', () => {
+				const intcodeComputer = buildIntcodeComputer(software);
+				intcodeComputer.addToInputQueue(input);
+				intcodeComputer.runUntil(operationCodes.halt);
+
+				expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 			});
 		});
 	});
