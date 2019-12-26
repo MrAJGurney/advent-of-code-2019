@@ -36,7 +36,11 @@ module.exports = {
 		stars: require('./09/09'),
 	},
 	'10': {
-		title: 'Monitoring Station ',
+		title: 'Monitoring Station',
 		stars: require('./10/10'),
+	},
+	'11': {
+		title: 'Space Police',
+		stars: require('./11/11'),
 	},
 };

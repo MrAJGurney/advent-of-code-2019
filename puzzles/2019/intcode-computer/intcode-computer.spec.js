@@ -15,7 +15,7 @@ describe('day 02 (initial implementation)', () => {
 		describe.each(scenarios)('when the computer runs', ({ software, endState, }) => {
 			it('ends at the expected end state', () => {
 				const intcodeComputer = buildIntcodeComputer(software);
-				intcodeComputer.runUntil(operationCodes.halt);
+				intcodeComputer.runUntil([operationCodes.halt,]);
 
 				expect(intcodeComputer.software).toStrictEqual(endState);
 			});
@@ -36,7 +36,7 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 				it('has the expected output', () => {
 					const intcodeComputer = buildIntcodeComputer(software);
 					intcodeComputer.addToInputQueue(input);
-					intcodeComputer.runUntil(operationCodes.halt);
+					intcodeComputer.runUntil([operationCodes.halt,]);
 
 					expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 				});
@@ -50,7 +50,7 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 
 		it('stores the expected value in the expected location', () => {
 			const intcodeComputer = buildIntcodeComputer(software);
-			intcodeComputer.runUntil(operationCodes.halt);
+			intcodeComputer.runUntil([operationCodes.halt,]);
 			expect(intcodeComputer.software[expected.address]).toStrictEqual(expected.value);
 		});
 	});
@@ -72,7 +72,7 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 				it('has the expected output', () => {
 					const intcodeComputer = buildIntcodeComputer(software);
 					intcodeComputer.addToInputQueue(input);
-					intcodeComputer.runUntil(operationCodes.halt);
+					intcodeComputer.runUntil([operationCodes.halt,]);
 
 					expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 				});
@@ -97,7 +97,7 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 				it('has the expected output', () => {
 					const intcodeComputer = buildIntcodeComputer(software);
 					intcodeComputer.addToInputQueue(input);
-					intcodeComputer.runUntil(operationCodes.halt);
+					intcodeComputer.runUntil([operationCodes.halt,]);
 
 					expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 				});
@@ -120,7 +120,7 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 				it('has the expected output', () => {
 					const intcodeComputer = buildIntcodeComputer(software);
 					intcodeComputer.addToInputQueue(input);
-					intcodeComputer.runUntil(operationCodes.halt);
+					intcodeComputer.runUntil([operationCodes.halt,]);
 
 					expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 				});
@@ -148,7 +148,7 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 			it('has the expected output', () => {
 				const intcodeComputer = buildIntcodeComputer(software);
 				intcodeComputer.addToInputQueue(input);
-				intcodeComputer.runUntil(operationCodes.halt);
+				intcodeComputer.runUntil([operationCodes.halt,]);
 
 				expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 			});
@@ -167,7 +167,7 @@ describe('day 09 (arbitrarily large values, relative parameter mode)', () => {
 
 		it('has the expected output', () => {
 			const intcodeComputer = buildIntcodeComputer(software);
-			intcodeComputer.runUntil(operationCodes.halt);
+			intcodeComputer.runUntil([operationCodes.halt,]);
 
 			expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 		});
@@ -180,7 +180,7 @@ describe('day 09 (arbitrarily large values, relative parameter mode)', () => {
 
 		it('has the expected output', () => {
 			const intcodeComputer = buildIntcodeComputer(software);
-			intcodeComputer.runUntil(operationCodes.halt);
+			intcodeComputer.runUntil([operationCodes.halt,]);
 
 			expect(intcodeComputer.outputHeap).toHaveLength(1);
 			expect(intcodeComputer.outputHeap[0]).toHaveLength(expectedOutputLength);
@@ -194,7 +194,7 @@ describe('day 09 (arbitrarily large values, relative parameter mode)', () => {
 
 		it('has the expected output', () => {
 			const intcodeComputer = buildIntcodeComputer(software);
-			intcodeComputer.runUntil(operationCodes.halt);
+			intcodeComputer.runUntil([operationCodes.halt,]);
 
 			expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
 		});

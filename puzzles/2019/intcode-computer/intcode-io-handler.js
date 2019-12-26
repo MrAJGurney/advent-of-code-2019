@@ -3,4 +3,11 @@ const buildAddToInputQueue = self => input => {
 	return;
 };
 
-module.exports = { buildAddToInputQueue, };
+const buildReadFromOutputHeap = self => () => {
+	return self.outputHeap[self.outputHeap.length - 1];
+};
+
+module.exports = {
+	buildAddToInputQueue,
+	buildReadFromOutputHeap,
+};

@@ -1,5 +1,8 @@
 
-const { buildAddToInputQueue, } = require('./intcode-io-handler');
+const {
+	buildAddToInputQueue,
+	buildReadFromOutputHeap,
+} = require('./intcode-io-handler');
 const { buildOperations, } = require('./intcode-operations');
 const {
 	buildGetReadValue,
@@ -47,11 +50,14 @@ const buildIntcodeComputer = software => {
 
 	const addToInputQueue = buildAddToInputQueue(self);
 
+	const readFromOutputHeap = buildReadFromOutputHeap(self);
+
 	return Object.assign(
 		self,
 		{ operations, },
 		{ runUntil, },
-		{ addToInputQueue, }
+		{ addToInputQueue, },
+		{ readFromOutputHeap, }
 	);
 };
 

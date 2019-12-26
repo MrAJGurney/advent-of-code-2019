@@ -1,8 +1,8 @@
-const buildRunUntil = (self, operations) => finalOperationCode => {
+const buildRunUntil = (self, operations) => finalOperationCodes => {
 	while(true) {
 		updateCurrentInstruction(self)();
 		handleCurrentInstruction(self, operations)();
-		if (self.currentOperationCode === finalOperationCode)
+		if (finalOperationCodes.includes(self.currentOperationCode))
 		{
 			return operations.code;
 		}
