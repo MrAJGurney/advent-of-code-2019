@@ -7,6 +7,7 @@ const operationCodes = {
 	jumpIfFalse: '06',
 	lessThan: '07',
 	equals: '08',
+	adjustRelativeBase: '09',
 	halt: '99',
 };
 

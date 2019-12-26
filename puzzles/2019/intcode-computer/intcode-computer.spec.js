@@ -155,3 +155,48 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 		});
 	});
 });
+
+describe('day 09 (arbitrarily large values, relative parameter mode)', () => {
+	describe('software that outputs itself', () => {
+		const software = [
+			'109','1','204','-1','1001','100','1','100','1008','100','16',
+			'101','1006','101','0','99',
+		];
+
+		const expectedOutput = software;
+
+		it('has the expected output', () => {
+			const intcodeComputer = buildIntcodeComputer(software);
+			intcodeComputer.runUntil(operationCodes.halt);
+
+			expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
+		});
+	});
+
+	describe('software that outputs a 16 digit number', () => {
+		const software = [ '1102','34915192','34915192','7','4','7','99','0', ];
+
+		const expectedOutputLength = 16;
+
+		it('has the expected output', () => {
+			const intcodeComputer = buildIntcodeComputer(software);
+			intcodeComputer.runUntil(operationCodes.halt);
+
+			expect(intcodeComputer.outputHeap).toHaveLength(1);
+			expect(intcodeComputer.outputHeap[0]).toHaveLength(expectedOutputLength);
+		});
+	});
+
+	describe('software that outputs middle number', () => {
+		const software = [ '104','1125899906842624','99', ];
+
+		const expectedOutput = ['1125899906842624',];
+
+		it('has the expected output', () => {
+			const intcodeComputer = buildIntcodeComputer(software);
+			intcodeComputer.runUntil(operationCodes.halt);
+
+			expect(intcodeComputer.outputHeap).toStrictEqual(expectedOutput);
+		});
+	});
+});
