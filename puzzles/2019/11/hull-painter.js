@@ -27,6 +27,10 @@ const buildHullPainter = software => {
 		intcodeComputer: buildIntcodeComputer(software),
 
 		paintedHullPanels: {},
+		hullPanelDimenions: {
+			x: { min: 0, max: 0, },
+			y: { min: 0, max: 0, },
+		},
 
 		position: { x: 0, y: 0, },
 		orientation: orientations.up,
@@ -34,9 +38,12 @@ const buildHullPainter = software => {
 
 	const paintHull = buildPaintHull(self);
 
+	const displayPaintedHull = buildDisplayPaintedHull(self);
+
 	return Object.assign(
 		self,
-		{ paintHull, }
+		{ paintHull, },
+		{ displayPaintedHull, }
 	);
 };
 
@@ -87,7 +94,18 @@ const buildPaintHull = self => () => {
 			x: self.position.x + self.orientation.x,
 			y: self.position.y + self.orientation.y,
 		};
-	}
+
+		self.hullPanelDimenions = {
+			x: {
+				min: Math.min(self.hullPanelDimenions.x.min, self.position.x),
+				max: Math.max(self.hullPanelDimenions.x.max, self.position.x),
+			},
+			y: {
+				min: Math.min(self.hullPanelDimenions.y.min, self.position.y),
+				max: Math.max(self.hullPanelDimenions.y.max, self.position.y),
+			},
+		};
+	};
 };
 
 const buildPaintedHullPanelKey = position => {
@@ -112,6 +130,44 @@ const rotate = (orientation, rotationCode) => {
 	}
 
 	throw new Error('Unhandled rotation code');
+};
+
+const buildDisplayPaintedHull = self => () => {
+	const xRange =
+		self.hullPanelDimenions.x.max - self.hullPanelDimenions.x.min;
+	const xOffset =
+		self.hullPanelDimenions.x.min;
+
+	const yRange =
+		self.hullPanelDimenions.y.max - self.hullPanelDimenions.y.min;
+	const yOffset =
+		self.hullPanelDimenions.y.min;
+
+	const widthMultiplier = 1;
+
+	const paintedHullDisplay = [];
+
+	// My coordinates are... odd... so I've had to muck around with the output
+	for (let x = xRange; x >= 0; x--) {
+		const row = [];
+		for (let y = yRange; y >= 0; y--) {
+			const hullPanelPosition = buildPaintedHullPanelKey({
+				x: x + xOffset,
+				y: y + yOffset,
+			});
+			const hullPanelColour =
+				self.paintedHullPanels.hasOwnProperty(hullPanelPosition) &&
+				self.paintedHullPanels[
+					hullPanelPosition
+				] === panelColourCodes.white ?
+					'█'.repeat(widthMultiplier) :
+					'░'.repeat(widthMultiplier);
+			row.push(hullPanelColour);
+		}
+		paintedHullDisplay.push(row.join(''));
+	}
+
+	return paintedHullDisplay;
 };
 
 module.exports = {
