@@ -8,7 +8,11 @@ const {
 	buildGetReadValue,
 	buildGetWritePosition,
 } = require('./intcode-parameter-modes');
-const { buildRunUntil, } = require('./intcode-runner');
+const {
+	buildRunUntil,
+	buildRunUntilNextIs,
+	buildPeakNextInstruction,
+} = require('./intcode-runner');
 const { operationCodes, } = require('./operation-codes');
 const { parameterModeCodes, } = require('./parameter-mode-codes');
 
@@ -48,6 +52,10 @@ const buildIntcodeComputer = software => {
 
 	const runUntil = buildRunUntil(self, operations);
 
+	const runUntilNextIs = buildRunUntilNextIs(self, operations);
+
+	const peakNextInstruction = buildPeakNextInstruction(self);
+
 	const addToInputQueue = buildAddToInputQueue(self);
 
 	const readFromOutputHeap = buildReadFromOutputHeap(self);
@@ -56,6 +64,8 @@ const buildIntcodeComputer = software => {
 		self,
 		{ operations, },
 		{ runUntil, },
+		{ runUntilNextIs, },
+		{ peakNextInstruction, },
 		{ addToInputQueue, },
 		{ readFromOutputHeap, }
 	);

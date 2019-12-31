@@ -1,20 +1,31 @@
 const buildRunUntil = (self, operations) => finalOperationCodes => {
 	while(true) {
-		updateCurrentInstruction(self)();
-		handleCurrentInstruction(self, operations)();
+		buildUpdateCurrentInstruction(self)();
+		buildHandleCurrentInstruction(self, operations)();
 		if (finalOperationCodes.includes(self.currentOperationCode))
 		{
-			return operations.code;
+			return;
 		}
 	}
 };
 
-const updateCurrentInstruction = self => () => {
-	updateCurrentOperation(self)();
+const buildRunUntilNextIs = (self, operations) => finalOperationCodes => {
+	while(true) {
+		buildUpdateCurrentInstruction(self)();
+		buildHandleCurrentInstruction(self, operations)();
+		if (finalOperationCodes.includes(self.peakNextInstruction()))
+		{
+			return;
+		}
+	}
+};
+
+const buildUpdateCurrentInstruction = self => () => {
+	buildUpdateCurrentOperation(self)();
 	return;
 };
 
-const updateCurrentOperation = self => () => {
+const buildUpdateCurrentOperation = self => () => {
 	const {
 		instructionPtr,
 		software,
@@ -27,7 +38,7 @@ const updateCurrentOperation = self => () => {
 	return;
 };
 
-const handleCurrentInstruction = (self, operations) => () => {
+const buildHandleCurrentInstruction = (self, operations) => () => {
 	const { currentOperationCode, } = self;
 	const handleOperationCode = operations.get(currentOperationCode);
 
@@ -39,4 +50,19 @@ const handleCurrentInstruction = (self, operations) => () => {
 	return;
 };
 
-module.exports = { buildRunUntil, };
+const buildPeakNextInstruction = self => () => {
+	const {
+		instructionPtr,
+		software,
+	} = self;
+
+	let operationCode = software[instructionPtr].slice(-2);
+	operationCode = '0'.repeat(2 - operationCode.length) + operationCode;
+	return operationCode;
+};
+
+module.exports = {
+	buildRunUntil,
+	buildRunUntilNextIs,
+	buildPeakNextInstruction,
+};
