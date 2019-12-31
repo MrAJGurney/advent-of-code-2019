@@ -47,4 +47,8 @@ module.exports = {
 		title: 'Care Package',
 		stars: require('./13/13'),
 	},
+	'15': {
+		title: 'Oxygen System',
+		stars: require('./15/15'),
+	},
 };
