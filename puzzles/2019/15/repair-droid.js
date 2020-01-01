@@ -18,22 +18,16 @@ const statusResponseCodes = {
 	oxygenSystem: '2',
 };
 
-const startLocation = { x: 0, y:0, };
-
 const buildRepairDroid = software => {
 	const self = {
 		intcodeComputer: buildIntcodeComputer(software),
-
-		locationsTree: {
-			position: startLocation,
-			directions: [],
-		},
-
-		oxygenSystemDirections: [],
 	};
 
 	const getShortestRouteToOxygenSystem =
 		buildGetShortestRouteToOxygenSystem(self);
+
+	const getFurthestRouteFromOxygenSystemToEdge =
+		buildGetFurthestRouteFromOxygenSystemToEdge(self);
 
 	const findOxygenSystem =
 		buildFindOxygenSystem(self);
@@ -49,6 +43,7 @@ const buildRepairDroid = software => {
 	return Object.assign(
 		self,
 		{ getShortestRouteToOxygenSystem, },
+		{ getFurthestRouteFromOxygenSystemToEdge, },
 		{ findOxygenSystem, },
 		{ moveToNodeFromStart, },
 		{ moveInDirection, },
@@ -58,15 +53,20 @@ const buildRepairDroid = software => {
 };
 
 const buildGetShortestRouteToOxygenSystem = self => () => {
-	self.findOxygenSystem();
-	return self.oxygenSystemDirections.length;
+	const oxygenSystemDirections = self.findOxygenSystem();
+	return oxygenSystemDirections.length;
 };
 
 const buildFindOxygenSystem = self => () => {
+	let oxygenSystemDirections = [];
 	find_oxygen_system: {
 		const visitedNodes = {};
+		const locationsTree = {
+			position: { x: 0, y:0, },
+			directions: [],
+		};
 
-		let extremisNodes = [self.locationsTree,];
+		let extremisNodes = [locationsTree,];
 		while(true) {
 			const newExtremisNodes = [];
 			for (const extremisNode of extremisNodes) {
@@ -99,7 +99,7 @@ const buildFindOxygenSystem = self => () => {
 						self.moveInReverseDirection(direction);
 					}
 					if (responseCode === statusResponseCodes.oxygenSystem) {
-						self.oxygenSystemDirections =
+						oxygenSystemDirections =
 							[...extremisNode.directions, direction,];
 						break find_oxygen_system;
 					}
@@ -110,12 +110,71 @@ const buildFindOxygenSystem = self => () => {
 			extremisNodes = newExtremisNodes;
 		};
 	}
+	return oxygenSystemDirections;
+};
+
+const buildGetFurthestRouteFromOxygenSystemToEdge = self => () => {
+	let minutesTaken = 0;
+	find_all_empty_spaces: {
+		self.findOxygenSystem();
+		const visitedNodes = {};
+		const locationsTree = {
+			position: { x: 0, y:0, },
+			directions: [],
+		};
+
+		let extremisNodes = [locationsTree,];
+		while(true) {
+			const newExtremisNodes = [];
+			for (const extremisNode of extremisNodes) {
+				self.moveToNodeFromStart(extremisNode);
+
+				for(const directionKey of Object.keys(movementCommandCodes)) {
+					const direction = movementCommandCodes[directionKey];
+					const responseCode =
+						self.moveInDirection(direction);
+					extremisNode[directionKey] = responseCode;
+					if ([
+						statusResponseCodes.space,
+						statusResponseCodes.oxygenSystem,
+					].includes(responseCode)) {
+						extremisNode[directionKey] = {
+							directions: [
+								...extremisNode.directions,
+								direction,
+							],
+							position: newPosition(
+								extremisNode.position,
+								direction
+							),
+						};
+
+						const positionKey = buildPositionKey(
+							extremisNode[directionKey].position
+						);
+						if (!visitedNodes.hasOwnProperty(positionKey)) {
+							newExtremisNodes.push(extremisNode[directionKey]);
+							visitedNodes[positionKey] = true;
+						}
+						self.moveInReverseDirection(direction);
+					}
+				};
+				self.moveToStartFromNode(extremisNode);
+			};
+			if (newExtremisNodes.length === 0) {
+				break find_all_empty_spaces;
+			}
+			minutesTaken++;
+			extremisNodes = newExtremisNodes;
+		};
+	}
+	return minutesTaken;
 };
 
 const buildMoveToNodeFromStart = self => node => {
 	for (const direction of node.directions) {
 		const response = self.moveInDirection(direction);
-		if (response !== statusResponseCodes.space) {
+		if (response === statusResponseCodes.wall) {
 			throw new Error('Unexpected obstacle on return path');
 		}
 	}
@@ -134,7 +193,7 @@ const buildMoveInDirection = self => direction => {
 const buildMoveToStartFromNode = self => node => {
 	for (const direction of node.directions.slice().reverse()) {
 		const response = self.moveInReverseDirection(direction);
-		if (response !== statusResponseCodes.space) {
+		if (response === statusResponseCodes.wall) {
 			throw new Error('Unexpected obstacle on return path');
 		}
 	}
@@ -142,7 +201,7 @@ const buildMoveToStartFromNode = self => node => {
 
 const buildMoveInReverseDirection = self => direction => {
 	const response = self.moveInDirection(getReverse(direction));
-	if (response !== statusResponseCodes.space) {
+	if (response === statusResponseCodes.wall) {
 		throw new Error('Unexpected obstacle on return path');
 	}
 	return response;
