@@ -3,10 +3,15 @@ const buildScaffoldMapper = intcodeComputer => {
 		intcodeComputer,
 	};
 
+	const getAlignmentParameters = buildGetAlignmentParameters();
+
 	return Object.assign(
-		self
+		self,
+		{ getAlignmentParameters, }
 	);
 };
+
+const buildGetAlignmentParameters = () => () => {};
 
 module.exports = {
 	buildScaffoldMapper,

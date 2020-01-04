@@ -13,4 +13,16 @@ describe('scaffoldMapper', () => {
 			expect(scaffoldMapper.intcodeComputer).toBe(mockIntcodeComputer);
 		});
 	});
+
+	describe('getAlignmentParameters', () => {
+		it('exists', () => {
+			const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
+			expect(scaffoldMapper).toHaveProperty('getAlignmentParameters');
+		});
+		it('is a function', () => {
+			const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
+			expect(typeof scaffoldMapper.getAlignmentParameters)
+				.toStrictEqual('function');
+		});
+	});
 });
