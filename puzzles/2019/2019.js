@@ -51,4 +51,8 @@ module.exports = {
 		title: 'Oxygen System',
 		stars: require('./15/15'),
 	},
+	'17': {
+		title: 'Set and Forget',
+		stars: require('./17/17'),
+	},
 };
