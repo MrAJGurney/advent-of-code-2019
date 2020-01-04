@@ -25,4 +25,16 @@ describe('scaffoldMapper', () => {
 				.toStrictEqual('function');
 		});
 	});
+
+	describe('mapScaffolds', () => {
+		it('exists', () => {
+			const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
+			expect(scaffoldMapper).toHaveProperty('mapScaffolds');
+		});
+		it('is a function', () => {
+			const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
+			expect(typeof scaffoldMapper.mapScaffolds)
+				.toStrictEqual('function');
+		});
+	});
 });
