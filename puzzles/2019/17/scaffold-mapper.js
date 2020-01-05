@@ -43,10 +43,8 @@ const buildScaffoldMapper = intcodeComputer => {
 const buildGetAlignmentParameters = self => () => {
 	self.mapScaffolds();
 	const intersections = self.findAllScaffoldIntersections();
-	const alignmentParamReducer = (alignmentParamSum, intersection) =>
-		alignmentParamSum + (intersection.x * intersection.y)
 
-	return intersections.reduce(alignmentParamReducer, 0);
+	return intersections.map(intersection => intersection.x * intersection.y);
 };
 
 const buildMapScaffolds = self => () => {

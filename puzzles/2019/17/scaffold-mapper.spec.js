@@ -22,7 +22,7 @@ const scaffolds = [
 
 const intersections = [{ x:2,y:2, }, { x:2, y:4, },];
 
-const alignmentParamsSum = 12;
+const alignmentParameters = [4, 8];
 
 const mockIntcodeComputer = {
 	outputHeap: intcodeOutput,
@@ -61,7 +61,7 @@ describe('scaffoldMapper', () => {
 		it('returns the sum of alignment parameters', () => {
 			const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
 			expect(scaffoldMapper.getAlignmentParameters())
-				.toStrictEqual(alignmentParamsSum);
+				.toStrictEqual(alignmentParameters);
 		});
 	});
 
