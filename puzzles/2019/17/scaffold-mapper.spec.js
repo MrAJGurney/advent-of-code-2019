@@ -1,14 +1,29 @@
 const { buildScaffoldMapper, } = require('./scaffold-mapper');
 
-const mockOutput = [
-	'46', '46', '35', '46', '46', '10',
-	'35', '35', '35', '35', '35', '10',
+const intcodeOutput = [
+	'35', '35', '35', '46', '35', '10',
 	'35', '46', '35', '46', '35', '10',
-	'35', '35', '35', '46', '94', '10',
+	'35', '35', '35', '35', '35', '10',
+	'46', '46', '35', '46', '46', '10',
+	'35', '35', '35', '60', '35', '10',
+	'35', '46', '35', '46', '35', '10',
+	'35', '35', '35', '46', '35', '10',
 ];
 
+const scaffolds = [
+	['#', '#', '#', '.', '#',],
+	['#', '.', '#', '.', '#',],
+	['#', '#', '#', '#', '#',],
+	['.', '.', '#', '.', '.',],
+	['#', '#', '#', '<', '#',],
+	['#', '.', '#', '.', '#',],
+	['#', '#', '#', '.', '#',],
+];
+
+const intersections =[{ x:2,y:2, }, { x:2, y:4, },];
+
 const mockIntcodeComputer = {
-	outputHeap: mockOutput,
+	outputHeap: intcodeOutput,
 	runUntil: () => {},
 };
 
@@ -53,18 +68,48 @@ describe('scaffoldMapper', () => {
 			expect(typeof scaffoldMapper.mapScaffolds)
 				.toStrictEqual('function');
 		});
-		it('maps intcode output to scaffold', () => {
-			const expectedScaffolds = [
-				['.', '.', '#', '.', '.',],
-				['#', '#', '#', '#', '#',],
-				['#', '.', '#', '.', '#',],
-				['#', '#', '#', '.', '^',],
-			];
+		it('stores intcode output as scaffolds', () => {
 
 			const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
 			scaffoldMapper.mapScaffolds();
 
-			expect(scaffoldMapper.scaffolds).toStrictEqual(expectedScaffolds);
+			expect(scaffoldMapper.scaffolds).toStrictEqual(scaffolds);
 		});
+	});
+
+	describe('findAllScaffoldIntersections', () => {
+		it('exists', () => {
+			const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
+			expect(scaffoldMapper)
+				.toHaveProperty('findAllScaffoldIntersections');
+		});
+		it('is a function', () => {
+			const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
+			expect(typeof scaffoldMapper.findAllScaffoldIntersections)
+				.toStrictEqual('function');
+		});
+		it('returns expected number of intersections', () => {
+			const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
+			scaffoldMapper.scaffolds = scaffolds;
+			const foundIntersections =
+				scaffoldMapper.findAllScaffoldIntersections();
+
+			expect(foundIntersections)
+				.toHaveLength(intersections.length);
+
+		});
+		it.each(intersections)(
+			'returns intersection',
+			expectedIntersection => {
+				const scaffoldMapper = buildScaffoldMapper(mockIntcodeComputer);
+				scaffoldMapper.scaffolds = scaffolds;
+				const foundIntersections =
+					scaffoldMapper.findAllScaffoldIntersections();
+				expect(foundIntersections.findIndex(intersection =>
+					expectedIntersection.x === intersection.x &&
+					expectedIntersection.y === intersection.y))
+					.not.toBe(-1);
+			}
+		);
 	});
 });
