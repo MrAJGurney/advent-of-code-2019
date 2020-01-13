@@ -1,3 +1,5 @@
+'use strict';
+
 const calculateOrbitalChecksum = orbitalRelationships => {
 	const primaryBodysWithOrbitingBodys =
 		getPrimaryBodysWithOrbitingBodys(orbitalRelationships);

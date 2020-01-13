@@ -1,3 +1,5 @@
+'use strict';
+
 const defaultParameterMode = '0';
 
 const buildOperations = (

@@ -1,3 +1,5 @@
+'use strict';
+
 const { buildScaffoldMapper, } = require('./scaffold-mapper');
 
 const intcodeOutput = [

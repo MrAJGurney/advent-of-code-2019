@@ -1,3 +1,5 @@
+'use strict';
+
 const passwordLength = 6;
 
 const getValidPasswordCount = (min, max) => {

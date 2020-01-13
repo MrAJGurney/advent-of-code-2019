@@ -1,3 +1,5 @@
+'use strict';
+
 const operationCodes = {
 	add: '01',
 	multiply: '02',

@@ -1,3 +1,5 @@
+'use strict';
+
 const calculateOrbitalTransfer = (
 	orbitalBodyA,
 	orbitalBodyB,

@@ -1,3 +1,5 @@
+'use strict';
+
 const {
 	operationCodes,
 } = require('../intcode-computer/operation-codes');

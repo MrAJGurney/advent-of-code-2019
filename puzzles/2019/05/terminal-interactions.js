@@ -1,3 +1,5 @@
+'use strict';
+
 const inquirer = require('inquirer');
 
 const requestTerminalInput = async inputName => {

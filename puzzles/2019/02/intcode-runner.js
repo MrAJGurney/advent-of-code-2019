@@ -1,3 +1,5 @@
+'use strict';
+
 const optCodes = {
 	add: 1,
 	multiply: 2,

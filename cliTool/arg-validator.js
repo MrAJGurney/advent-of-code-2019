@@ -1,3 +1,5 @@
+'use strict';
+
 const validateYear = year => {
 	const min = 2019;
 	const max = 2019;

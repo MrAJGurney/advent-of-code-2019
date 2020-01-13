@@ -1,3 +1,5 @@
+'use strict';
+
 const {
 	findMostAsteroidsVisible,
 	rowsAndColumnsToXAndY,

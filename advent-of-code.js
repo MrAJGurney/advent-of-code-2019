@@ -1,3 +1,5 @@
+'use strict';
+
 const puzzles = require('./puzzles/puzzles');
 const {
 	validateYear,

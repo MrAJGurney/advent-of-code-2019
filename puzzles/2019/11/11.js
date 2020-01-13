@@ -1,3 +1,5 @@
+'use strict';
+
 const {
 	readIntcodeSoftware,
 } = require('./file-interactions');

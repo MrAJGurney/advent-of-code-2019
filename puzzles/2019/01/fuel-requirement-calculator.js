@@ -1,3 +1,5 @@
+'use strict';
+
 const calculateTotalFuelForMasses = masses => {
 	const fuels = masses.map(mass => calculateFuelRequiredForMass(mass));
 	const totalFuel = fuels.reduce((accumulator, currentFuel) => {

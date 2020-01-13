@@ -1,3 +1,5 @@
+'use strict';
+
 const {
 	runDiagnostics,
 } = require('./intcode-terminal');

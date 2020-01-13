@@ -1,3 +1,5 @@
+'use strict';
+
 const OPERATIONS = {
 	add: {
 		code: 1,

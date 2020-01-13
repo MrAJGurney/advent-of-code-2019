@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
 	'1': {
 		title: 'The Tyranny of the Rocket Equation',

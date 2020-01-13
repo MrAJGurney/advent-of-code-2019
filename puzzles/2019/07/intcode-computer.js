@@ -1,3 +1,5 @@
+'use strict';
+
 const { OPERATIONS, } = require('./operations');
 
 class IntcodeComputer {

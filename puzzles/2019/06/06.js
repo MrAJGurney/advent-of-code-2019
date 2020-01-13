@@ -1,3 +1,5 @@
+'use strict';
+
 const {
 	calculateOrbitalChecksum,
 } = require('./orbit-checksum-counter');

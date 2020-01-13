@@ -1,3 +1,5 @@
+'use strict';
+
 const buildRunUntil = (self, operations) => finalOperationCodes => {
 	while(true) {
 		buildUpdateCurrentInstruction(self)();

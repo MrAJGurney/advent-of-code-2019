@@ -1,3 +1,4 @@
+'use strict';
 
 const findWireIntersectionClosestToOrigin = (wirePathA, wirePathB) => {
 	const intersectionPoints = findWireIntersections(wirePathA, wirePathB);

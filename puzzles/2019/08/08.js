@@ -1,3 +1,5 @@
+'use strict';
+
 const {
 	SpaceImageFormatPicture,
 } = require('./space-image-format-picture');

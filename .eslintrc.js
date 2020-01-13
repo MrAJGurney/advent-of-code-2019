@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
 	'env': {
 		'commonjs': true,
@@ -53,6 +55,10 @@ module.exports = {
 		'semi': [
 			'error',
 			'always',
+		],
+		'strict': [
+			'error',
+			'global',
 		],
 	},
 };

@@ -1,3 +1,5 @@
+'use strict';
+
 const buildAddToInputQueue = self => input => {
 	self.inputQueue.push(input);
 	return;
