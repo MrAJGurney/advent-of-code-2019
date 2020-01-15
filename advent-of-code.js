@@ -9,7 +9,7 @@ const {
 
 const adventOfCode = async () => {
 	const args = process.argv.slice(2);
-	const [year, day, star,] = args;
+	const [year, day, star, ] = args;
 
 	validateYear(year);
 	validateDay(day);
@@ -38,7 +38,7 @@ const adventOfCode = async () => {
 const solveWithExecutionTime = async solver => {
 	const highResolutionTimeStart = process.hrtime();
 	const solution = await solver();
-	const [seconds, nanoseconds,] = process.hrtime(highResolutionTimeStart);
+	const [seconds, nanoseconds, ] = process.hrtime(highResolutionTimeStart);
 	const totalElapsedNanoseconds = (seconds* Math.pow(1000, 3)) + nanoseconds;
 	const totalElapsedMicroseconds =
 		Math.round(totalElapsedNanoseconds / Math.pow(1000, 1));

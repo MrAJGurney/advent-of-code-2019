@@ -22,7 +22,7 @@ const calculateOrbitalTransfer = (
 
 const getOrbitingBodysWithPrimaryBody = orbitalRelationships => {
 	return orbitalRelationships.reduce((accumulator, orbitalRelationship) => {
-		const [primaryBody, orbitingBody,] = orbitalRelationship;
+		const [primaryBody, orbitingBody, ] = orbitalRelationship;
 
 		accumulator[orbitingBody] = primaryBody;
 
@@ -31,7 +31,7 @@ const getOrbitingBodysWithPrimaryBody = orbitalRelationships => {
 };
 
 const getOrbitChain = (orbitalBody, orbitingBodysWithPrimaryBody) => {
-	const orbitChain = [orbitalBody,];
+	const orbitChain = [orbitalBody, ];
 
 	let currentOrbitalBody = orbitalBody;
 	while (orbitingBodysWithPrimaryBody.hasOwnProperty(currentOrbitalBody)) {

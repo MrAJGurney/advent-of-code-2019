@@ -9,8 +9,8 @@ const mockScaffoldMapper = {};
 describe('vacuumRobot', () => {
 	describe('properties', () => {
 		const properties = [
-			['intcodeComputer', mockIntcodeComputer,],
-			['scaffoldMapper', mockScaffoldMapper,],
+			['intcodeComputer', mockIntcodeComputer, ],
+			['scaffoldMapper', mockScaffoldMapper, ],
 		];
 
 		describe.each(properties)('%s', (name, initialValue) => {

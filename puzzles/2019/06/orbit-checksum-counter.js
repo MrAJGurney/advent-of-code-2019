@@ -12,7 +12,7 @@ const calculateOrbitalChecksum = orbitalRelationships => {
 
 const getPrimaryBodysWithOrbitingBodys = orbitalRelationships => {
 	return orbitalRelationships.reduce((accumulator, orbitalRelationship) => {
-		const [primaryBody, orbitingBody,] = orbitalRelationship;
+		const [primaryBody, orbitingBody, ] = orbitalRelationship;
 
 		if (!accumulator.hasOwnProperty(primaryBody)) {
 			accumulator[primaryBody] = [];

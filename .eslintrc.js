@@ -14,13 +14,13 @@ module.exports = {
 		'ecmaVersion': 2018,
 	},
 	'rules': {
-		'arrow-parens': ['error', 'as-needed',],
+		'arrow-parens': ['error', 'as-needed', ],
 		'comma-dangle': ['error', {
 			'arrays': 'always',
 			'objects': 'always',
 			'imports': 'never',
 			'exports': 'never',
-			'functions': 'never', },],
+			'functions': 'never', }, ],
 		'indent': [
 			'error',
 			'tab',
@@ -33,7 +33,7 @@ module.exports = {
 			'error',
 			{ 'code': 80, },
 		],
-		'no-console': ['error',],
+		'no-console': ['error', ],
 		'no-multiple-empty-lines': [
 			'error', { 'max': 1, },
 		],
@@ -42,12 +42,12 @@ module.exports = {
 			{ 'skipBlankLines': false,
 				'ignoreComments': false, },
 		],
-		'no-unused-vars': ['error',{ 'varsIgnorePattern': '^_$', },],
+		'no-unused-vars': ['error', { 'varsIgnorePattern': '^_$', }, ],
 		'no-var': [
 			'error',
 		],
-		'object-curly-spacing': ['error', 'always',],
-		'prefer-const': ['error',],
+		'object-curly-spacing': ['error', 'always', ],
+		'prefer-const': ['error', ],
 		'quotes': [
 			'error',
 			'single',
@@ -59,6 +59,13 @@ module.exports = {
 		'strict': [
 			'error',
 			'global',
+		],
+		'comma-spacing': [
+			'error',
+			{
+				'before': false,
+				'after': true,
+			},
 		],
 	},
 };

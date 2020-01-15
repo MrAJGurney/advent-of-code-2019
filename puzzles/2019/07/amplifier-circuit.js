@@ -58,7 +58,7 @@ const getPhaseSettingPermutations = (min, max) => {
 			for (let i2 = min; i2 <= max; i2++ ) {
 				for (let i3 = min; i3 <= max; i3++ ) {
 					for (let i4 = min; i4 <= max; i4++ ) {
-						const permutation = [i0, i1, i2, i3, i4,];
+						const permutation = [i0, i1, i2, i3, i4, ];
 						const permutationHasDuplicates =
 							new Set(permutation).size !== permutation.length;
 						if (!permutationHasDuplicates) {
@@ -80,7 +80,7 @@ const getThrustSignal = (software, initialSignal, phaseSettings) => {
 		const amplifier = new IntcodeComputer(software);
 		amplifier.addInput(phaseSettings[ampIndex]);
 		amplifier.addInput(signal);
-		amplifier.runUntilAfter([OPERATIONS.halt.code,]);
+		amplifier.runUntilAfter([OPERATIONS.halt.code, ]);
 		signal = amplifier.consumeOutput();
 	}
 
@@ -106,7 +106,7 @@ const getThrustSignalWithFeedback = (
 		const amplifier = amplifiers[ampIndex];
 		amplifier.addInput(signal);
 		finalOperationCode = amplifier
-			.runUntilAfter([OPERATIONS.halt.code, OPERATIONS.output.code,]);
+			.runUntilAfter([OPERATIONS.halt.code, OPERATIONS.output.code, ]);
 		if (finalOperationCode === OPERATIONS.halt.code) {
 			break;
 		}

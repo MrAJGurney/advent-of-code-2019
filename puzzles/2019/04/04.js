@@ -20,7 +20,7 @@ const solveSecondChallenge = () => {
 };
 
 const rangeFromPuzzleInput = puzzleInput => {
-	const [minAsText, maxAsText,] = puzzleInput.split('-');
+	const [minAsText, maxAsText, ] = puzzleInput.split('-');
 	const min = parseInt(minAsText);
 	const max = parseInt(maxAsText);
 	return { min, max, };

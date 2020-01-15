@@ -162,7 +162,7 @@ class IntcodeComputer {
 
 	_splitDigits(number) {
 		const radix = 10;
-		return [...number.toString(radix),].map(x => parseInt(x));
+		return [...number.toString(radix), ].map(x => parseInt(x));
 	};
 
 	_handleOperation(

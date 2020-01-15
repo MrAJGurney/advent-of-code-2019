@@ -17,7 +17,7 @@ const solveFirstChallenge = () => {
 
 	const intcodeComputer = buildIntcodeComputer(software);
 	intcodeComputer.addToInputQueue(input);
-	intcodeComputer.runUntil([operationCodes.halt,]);
+	intcodeComputer.runUntil([operationCodes.halt, ]);
 
 	return intcodeComputer.outputHeap[0];
 };
@@ -29,7 +29,7 @@ const solveSecondChallenge = () => {
 
 	const intcodeComputer = buildIntcodeComputer(software);
 	intcodeComputer.addToInputQueue(input);
-	intcodeComputer.runUntil([operationCodes.halt,]);
+	intcodeComputer.runUntil([operationCodes.halt, ]);
 
 	return intcodeComputer.outputHeap[0];
 };

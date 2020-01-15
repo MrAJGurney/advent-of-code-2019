@@ -70,8 +70,8 @@ const handleAdd = (
 		},
 	}
 ) => {
-	const [verb, noun, write,] = params;
-	const [verbMode, nounMode, writeMode,] = paramsModes;
+	const [verb, noun, write, ] = params;
+	const [verbMode, nounMode, writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const value =
 		getParamValue(verb, verbMode, readMemoryAt) +
@@ -98,8 +98,8 @@ const handleMultiply = (
 		},
 	}
 ) => {
-	const [verb, noun, write,] = params;
-	const [verbMode, nounMode, writeMode,] = paramsModes;
+	const [verb, noun, write, ] = params;
+	const [verbMode, nounMode, writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const value =
 		getParamValue(verb, verbMode, readMemoryAt) *
@@ -128,8 +128,8 @@ const handleInput = (
 		},
 	}
 ) => {
-	const [write,] = params;
-	const [writeMode,] = paramsModes;
+	const [write, ] = params;
+	const [writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const input = consumeInput();
 	writeMemoryAt({ ptr: write, value: input, });
@@ -156,8 +156,8 @@ const handleOutput = (
 		},
 	}
 ) => {
-	const [out,] = params;
-	const [outMode,] = paramsModes;
+	const [out, ] = params;
+	const [outMode, ] = paramsModes;
 	const output =
 		getParamValue(out, outMode, readMemoryAt);
 	addOutput(output);
@@ -181,8 +181,8 @@ const handleJumpIfTrue = (
 		},
 	}
 ) => {
-	const [verb, jumpTo,] = params;
-	const [verbMode, jumpToMode,] = paramsModes;
+	const [verb, jumpTo, ] = params;
+	const [verbMode, jumpToMode, ] = paramsModes;
 	const shouldJump = getParamValue(verb, verbMode, readMemoryAt) !== 0;
 	moveInstructionPtr(
 		shouldJump ?
@@ -208,8 +208,8 @@ const handleJumpIfFalse = (
 		},
 	}
 ) => {
-	const [verb, jumpTo,] = params;
-	const [verbMode, jumpToMode,] = paramsModes;
+	const [verb, jumpTo, ] = params;
+	const [verbMode, jumpToMode, ] = paramsModes;
 	const shouldJump = getParamValue(verb, verbMode, readMemoryAt) === 0;
 	moveInstructionPtr(
 		shouldJump ?
@@ -236,8 +236,8 @@ const handleLessThan = (
 		},
 	}
 ) => {
-	const [verb, noun, write,] = params;
-	const [verbMode, nounMode, writeMode,] = paramsModes;
+	const [verb, noun, write, ] = params;
+	const [verbMode, nounMode, writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const isLessThan =
 		getParamValue(verb, verbMode, readMemoryAt) <
@@ -266,8 +266,8 @@ const handleEquals = (
 		},
 	}
 ) => {
-	const [verb, noun, write,] = params;
-	const [verbMode, nounMode, writeMode,] = paramsModes;
+	const [verb, noun, write, ] = params;
+	const [verbMode, nounMode, writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const equals =
 		getParamValue(verb, verbMode, readMemoryAt) ===

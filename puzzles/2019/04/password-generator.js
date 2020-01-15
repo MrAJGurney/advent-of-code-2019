@@ -85,7 +85,7 @@ const getPasswordsWithLimitedAdjacentSameDigits = passwords => {
 
 const splitDigits = number => {
 	const radix = 10;
-	return [...number.toString(radix),].map(x => parseInt(x));
+	return [...number.toString(radix), ].map(x => parseInt(x));
 };
 
 const getMagnitudeFromIndex = index =>

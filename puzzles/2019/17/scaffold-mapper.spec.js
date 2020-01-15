@@ -13,18 +13,18 @@ const intcodeOutput = [
 ];
 
 const scaffolds = [
-	['#', '#', '#', '.', '#',],
-	['#', '.', '#', '.', '#',],
-	['#', '#', '#', '#', '#',],
-	['.', '.', '#', '.', '.',],
-	['#', '#', '#', '<', '#',],
-	['#', '.', '#', '.', '#',],
-	['#', '#', '#', '.', '#',],
+	['#', '#', '#', '.', '#', ],
+	['#', '.', '#', '.', '#', ],
+	['#', '#', '#', '#', '#', ],
+	['.', '.', '#', '.', '.', ],
+	['#', '#', '#', '<', '#', ],
+	['#', '.', '#', '.', '#', ],
+	['#', '#', '#', '.', '#', ],
 ];
 
-const intersections = [{ x:2,y:2, }, { x:2, y:4, },];
+const intersections = [{ x:2, y:2, }, { x:2, y:4, }, ];
 
-const alignmentParameters = [4, 8,];
+const alignmentParameters = [4, 8, ];
 
 const mockIntcodeComputer = {
 	outputHeap: intcodeOutput,
@@ -34,8 +34,8 @@ const mockIntcodeComputer = {
 describe('scaffoldMapper', () => {
 	describe('properties', () => {
 		const properties = [
-			['intcodeComputer',mockIntcodeComputer,],
-			['scaffolds',[],],
+			['intcodeComputer', mockIntcodeComputer, ],
+			['scaffolds', [], ],
 		];
 
 		describe.each(properties)('%s', (name, initialValue) => {

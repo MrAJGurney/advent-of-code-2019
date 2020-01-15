@@ -66,8 +66,8 @@ const handleAdd = (
 		},
 	}
 ) => {
-	const [verb, noun, write,] = params;
-	const [verbMode, nounMode, writeMode,] = paramsModes;
+	const [verb, noun, write, ] = params;
+	const [verbMode, nounMode, writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	memoryState[write] =
         getParamValue(verb, verbMode, memoryState) +
@@ -88,8 +88,8 @@ const handleMultiply = (
 		},
 	}
 ) => {
-	const [verb, noun, write,] = params;
-	const [verbMode, nounMode, writeMode,] = paramsModes;
+	const [verb, noun, write, ] = params;
+	const [verbMode, nounMode, writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	memoryState[write] =
         getParamValue(verb, verbMode, memoryState) *
@@ -113,8 +113,8 @@ const handleInput = (
 		},
 	}
 ) => {
-	const [write,] = params;
-	const [writeMode,] = paramsModes;
+	const [write, ] = params;
+	const [writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const id = requestTerminalInput('ID');
 	memoryState[write] = id;
@@ -137,8 +137,8 @@ const handleOutput = (
 		},
 	}
 ) => {
-	const [out,] = params;
-	const [outMode,] = paramsModes;
+	const [out, ] = params;
+	const [outMode, ] = paramsModes;
 	const output =
         getParamValue(out, outMode, memoryState);
 	handleTerminalOutput(output);
@@ -158,8 +158,8 @@ const handleJumpIfTrue = (
 		},
 	}
 ) => {
-	const [verb, jumpTo,] = params;
-	const [verbMode, jumpToMode,] = paramsModes;
+	const [verb, jumpTo, ] = params;
+	const [verbMode, jumpToMode, ] = paramsModes;
 	if (getParamValue(verb, verbMode, memoryState) !== 0) {
 		return getParamValue(jumpTo, jumpToMode, memoryState);
 	}
@@ -179,8 +179,8 @@ const handleJumpIfFalse = (
 		},
 	}
 ) => {
-	const [verb, jumpTo,] = params;
-	const [verbMode, jumpToMode,] = paramsModes;
+	const [verb, jumpTo, ] = params;
+	const [verbMode, jumpToMode, ] = paramsModes;
 	if (getParamValue(verb, verbMode, memoryState) === 0) {
 		return getParamValue(jumpTo, jumpToMode, memoryState);
 	}
@@ -200,8 +200,8 @@ const handleLessThan = (
 		},
 	}
 ) => {
-	const [verb, noun, write,] = params;
-	const [verbMode, nounMode, writeMode,] = paramsModes;
+	const [verb, noun, write, ] = params;
+	const [verbMode, nounMode, writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const isLessThan =
         getParamValue(verb, verbMode, memoryState) <
@@ -223,8 +223,8 @@ const handleEquals = (
 		},
 	}
 ) => {
-	const [verb, noun, write,] = params;
-	const [verbMode, nounMode, writeMode,] = paramsModes;
+	const [verb, noun, write, ] = params;
+	const [verbMode, nounMode, writeMode, ] = paramsModes;
 	throwIfParamIsInImmediateMode(writeMode, 'write');
 	const equals =
         getParamValue(verb, verbMode, memoryState) ===

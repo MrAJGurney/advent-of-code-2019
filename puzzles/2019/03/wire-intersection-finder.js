@@ -28,7 +28,7 @@ const findWireIntersections = (wirePathA, wirePathB) => {
 
 const findPointsOnPath = instructions => {
 	const origin = { x:0, y:0, distanceTravelled: 0, };
-	let points = [origin,];
+	let points = [origin, ];
 	const currentPoint = () => points[points.length - 1];
 	instructions.forEach(instruction => {
 		const newPoints = newPointsFromInstruction(currentPoint(), instruction);
@@ -38,7 +38,7 @@ const findPointsOnPath = instructions => {
 };
 
 const newPointsFromInstruction = (startPoint, instruction) => {
-	const points = [startPoint,];
+	const points = [startPoint, ];
 	const currentPoint = () => points[points.length - 1];
 
 	const { code, value, } = parseInstruction(instruction);
@@ -69,7 +69,7 @@ const newPointsFromInstruction = (startPoint, instruction) => {
 };
 
 const parseInstruction = instruction => {
-	const code = instruction.slice(0,1);
+	const code = instruction.slice(0, 1);
 	const valueAsText = instruction.slice(1);
 	const valueAsNumber = parseInt(valueAsText);
 	return {

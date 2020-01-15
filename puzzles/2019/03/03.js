@@ -8,14 +8,14 @@ const {
 } = require('./wire-intersection-finder');
 
 const solveFirstChallenge = () => {
-	const [wirePathA, wirePathB,] = readWirePathFromFile();
+	const [wirePathA, wirePathB, ] = readWirePathFromFile();
 	const intersectionDistance =
 	findWireIntersectionClosestToOrigin(wirePathA, wirePathB);
 	return intersectionDistance;
 };
 
 const solveSecondChallenge = () => {
-	const [wirePathA, wirePathB,] = readWirePathFromFile();
+	const [wirePathA, wirePathB, ] = readWirePathFromFile();
 	const combinedDistanceTravelled =
 	findWireIntersectionWithLeastDistanceTravelled(wirePathA, wirePathB);
 	return combinedDistanceTravelled;

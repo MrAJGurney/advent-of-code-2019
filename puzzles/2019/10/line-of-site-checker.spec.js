@@ -23,7 +23,7 @@ describe('asteroidsVisible', () => {
 		'...87'.split('').map(arg => parseInt(arg)),
 	];
 
-	const iterationPlaceholder = [0,1,2,3,4,];
+	const iterationPlaceholder = [0, 1, 2, 3, 4, ];
 
 	describe.each(iterationPlaceholder)(
 		'for each row',

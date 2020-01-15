@@ -84,9 +84,9 @@ class SpaceImageFormatPicture {
 			layerIndex++
 		) {
 			const layer = this.layers[layerIndex];
-			const pixelColour = layer.getPixel(row,column);
+			const pixelColour = layer.getPixel(row, column);
 			if (pixelColour !== pixelColours.transparent) {
-				return this.layers[layerIndex].getPixel(row,column);
+				return this.layers[layerIndex].getPixel(row, column);
 			}
 		}
 	}

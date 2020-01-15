@@ -68,7 +68,7 @@ const buildFindOxygenSystem = self => () => {
 			directions: [],
 		};
 
-		let extremisNodes = [locationsTree,];
+		let extremisNodes = [locationsTree, ];
 		while(true) {
 			const newExtremisNodes = [];
 			for (const extremisNode of extremisNodes) {
@@ -102,7 +102,7 @@ const buildFindOxygenSystem = self => () => {
 					}
 					if (responseCode === statusResponseCodes.oxygenSystem) {
 						oxygenSystemDirections =
-							[...extremisNode.directions, direction,];
+							[...extremisNode.directions, direction, ];
 						break find_oxygen_system;
 					}
 				};
@@ -125,7 +125,7 @@ const buildGetFurthestRouteFromOxygenSystemToEdge = self => () => {
 			directions: [],
 		};
 
-		let extremisNodes = [locationsTree,];
+		let extremisNodes = [locationsTree, ];
 		while(true) {
 			const newExtremisNodes = [];
 			for (const extremisNode of extremisNodes) {
