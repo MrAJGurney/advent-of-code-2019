@@ -1,5 +1,12 @@
 'use strict';
 
+const underscoreOnlyPattern = '^_$';
+// '^': Start of line
+// '_': Underscore character
+// '$': End of line
+
+/*eslint sort-keys: ["error", "asc", {"minKeys": 6}]*/
+
 module.exports = {
 	'env': {
 		'commonjs': true,
@@ -15,12 +22,23 @@ module.exports = {
 	},
 	'rules': {
 		'arrow-parens': ['error', 'as-needed', ],
-		'comma-dangle': ['error', {
-			'arrays': 'always',
-			'objects': 'always',
-			'imports': 'never',
-			'exports': 'never',
-			'functions': 'never', }, ],
+		'comma-dangle': [
+			'error',
+			{
+				'arrays': 'always',
+				'objects': 'always',
+				'imports': 'never',
+				'exports': 'never',
+				'functions': 'never',
+			},
+		],
+		'comma-spacing': [
+			'error',
+			{
+				'before': false,
+				'after': true,
+			},
+		],
 		'indent': [
 			'error',
 			'tab',
@@ -39,10 +57,15 @@ module.exports = {
 		],
 		'no-trailing-spaces': [
 			'error',
-			{ 'skipBlankLines': false,
-				'ignoreComments': false, },
+			{
+				'skipBlankLines': false,
+				'ignoreComments': false,
+			},
 		],
-		'no-unused-vars': ['error', { 'varsIgnorePattern': '^_$', }, ],
+		'no-unused-vars': [
+			'error',
+			{ 'varsIgnorePattern': underscoreOnlyPattern, },
+		],
 		'no-var': [
 			'error',
 		],
@@ -59,13 +82,6 @@ module.exports = {
 		'strict': [
 			'error',
 			'global',
-		],
-		'comma-spacing': [
-			'error',
-			{
-				'before': false,
-				'after': true,
-			},
 		],
 	},
 };
