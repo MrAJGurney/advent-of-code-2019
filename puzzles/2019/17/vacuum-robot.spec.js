@@ -13,6 +13,7 @@ describe('vacuumRobot', () => {
 			robot: {
 				position: { x: 1, y: 1, },
 				orientation: { x: -1, y:0, },
+				nextTileIsScaffold: true,
 			},
 		},
 		{
@@ -25,6 +26,7 @@ describe('vacuumRobot', () => {
 			robot: {
 				position: { x: 3, y: 1, },
 				orientation: { x: 0, y:1, },
+				nextTileIsScaffold: false,
 			},
 		},
 		{
@@ -40,6 +42,7 @@ describe('vacuumRobot', () => {
 			robot: {
 				position: { x: 4, y: 6, },
 				orientation: { x: 1, y:0, },
+				nextTileIsScaffold: false,
 			},
 		},
 	];
@@ -68,7 +71,7 @@ describe('vacuumRobot', () => {
 			scaffoldMapsWithDeterminedProperties
 		)(
 			'finds robot position and orientation',
-			({ scaffolds, robot: { orientation, position, }, }) => {
+			({ scaffolds, robot: { position, orientation, }, }) => {
 				mockScaffoldMapper.scaffolds = scaffolds;
 				const vacuumRobot =
 					buildVacuumRobot(mockIntcodeComputer, mockScaffoldMapper);
@@ -82,7 +85,25 @@ describe('vacuumRobot', () => {
 	});
 
 	describe('isNextTileScaffold', () => {
-		it.todo('determines if next tile is scaffold');
+		it.each(
+			scaffoldMapsWithDeterminedProperties
+		)(
+			'determines if next tile is scaffold',
+			({
+				scaffolds,
+				robot: { position, orientation, nextTileIsScaffold, },
+			 }) => {
+				mockScaffoldMapper.scaffolds = scaffolds;
+				const vacuumRobot =
+					buildVacuumRobot(mockIntcodeComputer, mockScaffoldMapper);
+
+				vacuumRobot.orientation = orientation;
+				vacuumRobot.position = position;
+
+				expect(vacuumRobot.isNextTileScaffold())
+					.toStrictEqual(nextTileIsScaffold);
+			}
+		);
 	});
 
 	describe('rotateRobot', () => {

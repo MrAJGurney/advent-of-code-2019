@@ -122,7 +122,29 @@ const buildFindRobotPositionAndOrientation = self => () => {
 	throw new Error('Robot not found');
 };
 
-const buildIsNextTileScaffold = () => () => {};
+const buildIsNextTileScaffold = self => () => {
+	const nextTilePosition = {
+		x: self.position.x + self.orientation.x,
+		y: self.position.y + self.orientation.y,
+	};
+
+	const yMax = self.scaffoldMapper.scaffolds.length - 1;
+	const xMax = self.scaffoldMapper.scaffolds[0].length - 1;
+
+	if (nextTilePosition.x < 0 || nextTilePosition > xMax) {
+		return false;
+	}
+
+	if (nextTilePosition.y < 0 || nextTilePosition > yMax) {
+		return false;
+	}
+
+	const nextTileSymbol = self
+		.scaffoldMapper
+		.scaffolds[nextTilePosition.y][nextTilePosition.x];
+
+	return nextTileSymbol === mapSymbols.scaffold;
+};
 
 const buildRotateRobot = () => () => {};
 
