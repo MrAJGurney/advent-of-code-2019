@@ -107,7 +107,34 @@ describe('vacuumRobot', () => {
 	});
 
 	describe('rotateRobot', () => {
-		it.todo('finds robot position and orientation');
+		const offsetFromOrientation = {
+			up: { x:0, y:-1, },
+			down: { x:0, y:1, },
+			right: { x:1, y:0, },
+			left: { x:-1, y:0, },
+		};
+
+		it('can rotate robot left', () => {
+			const vacuumRobot =
+				buildVacuumRobot(mockIntcodeComputer, mockScaffoldMapper);
+
+			vacuumRobot.orientation = offsetFromOrientation.up;
+			vacuumRobot.rotateRobot('L');
+
+			expect(vacuumRobot.orientation)
+				.toStrictEqual(offsetFromOrientation.left);
+		});
+
+		it('can rotate robot right', () => {
+			const vacuumRobot =
+				buildVacuumRobot(mockIntcodeComputer, mockScaffoldMapper);
+
+			vacuumRobot.orientation = offsetFromOrientation.right;
+			vacuumRobot.rotateRobot('R');
+
+			expect(vacuumRobot.orientation)
+				.toStrictEqual(offsetFromOrientation.down);
+		});
 	});
 
 	describe('breakdownPath', () => {

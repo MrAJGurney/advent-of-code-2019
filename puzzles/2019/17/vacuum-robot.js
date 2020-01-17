@@ -11,6 +11,11 @@ const mapSymbols = {
 	robotFacingImpendingDoom: 'X',
 };
 
+const rotationCommandSymbols = {
+	turnRight: 'R',
+	turnLeft: 'L',
+};
+
 const offsetFromOrientation = {
 	up: { x:0, y:-1, },
 	down: { x:0, y:1, },
@@ -146,7 +151,33 @@ const buildIsNextTileScaffold = self => () => {
 	return nextTileSymbol === mapSymbols.scaffold;
 };
 
-const buildRotateRobot = () => () => {};
+const buildRotateRobot = self => rotationCommandSymbol => {
+	if (rotationCommandSymbol === rotationCommandSymbols.turnLeft) {
+		const { x, y, } = self.orientation;
+		self.orientation = {
+			x: y,
+			y: -x,
+		};
+		if (Object.is(self.orientation.y, -0)) {
+			self.orientation.y = 0;
+		}
+		return;
+	}
+
+	if (rotationCommandSymbol === rotationCommandSymbols.turnRight) {
+		const { x, y, } = self.orientation;
+		self.orientation = {
+			x: -y,
+			y: x,
+		};
+		if (Object.is(self.orientation.x, -0)) {
+			self.orientation.x = 0;
+		}
+		return;
+	}
+
+	throw new Error('Unhandled rotation code');
+};
 
 const buildBreakdownPath = () => () => {};
 
