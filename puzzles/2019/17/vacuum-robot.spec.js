@@ -15,6 +15,10 @@ describe('vacuumRobot', () => {
 				orientation: { x: -1, y:0, },
 				nextTileIsScaffold: true,
 			},
+			path: [
+				'1',
+				'R', '1',
+			],
 		},
 		{
 			scaffolds: [
@@ -28,6 +32,12 @@ describe('vacuumRobot', () => {
 				orientation: { x: 0, y:1, },
 				nextTileIsScaffold: false,
 			},
+			path: [
+				'R', '1', '1', '1',
+				'L', '1', '1',
+				'L', '1', '1',
+				'L', '1', '1', '1',
+			],
 		},
 		{
 			scaffolds: [
@@ -44,6 +54,17 @@ describe('vacuumRobot', () => {
 				orientation: { x: 1, y:0, },
 				nextTileIsScaffold: false,
 			},
+			path: [
+				'L', '1', '1',
+				'L', '1', '1', '1', '1',
+				'L', '1', '1',
+				'L', '1', '1',
+				'L', '1', '1', '1', '1', '1', '1',
+				'R', '1', '1',
+				'R', '1', '1',
+				'R', '1', '1', '1', '1',
+				'R', '1', '1',
+			],
 		},
 	];
 
@@ -62,8 +83,21 @@ describe('vacuumRobot', () => {
 		it.todo('traverses scaffold');
 	});
 
-	describe.skip('findNaivePathOverScaffold', () => {
-		it.todo('finds naive path over scaffold');
+	describe('findNaivePathOverScaffold', () => {
+		it.each(
+			scaffoldMapsWithDeterminedProperties
+		)(
+			'finds naive path over scaffold',
+			({ scaffolds, path, }) => {
+				mockScaffoldMapper.scaffolds = scaffolds;
+				const vacuumRobot =
+					buildVacuumRobot(mockIntcodeComputer, mockScaffoldMapper);
+
+				vacuumRobot.findNaivePathOverScaffold();
+
+				expect(vacuumRobot.path).toStrictEqual(path);
+			}
+		);
 	});
 
 	describe('findRobotPositionAndOrientation', () => {

@@ -29,6 +29,7 @@ const buildVacuumRobot = (intcodeComputer, scaffoldMapper) => {
 		scaffoldMapper,
 		position: null,
 		orientation: null,
+		path: [],
 	};
 
 	const traverseScaffolds = buildTraverseScaffolds(self);
@@ -73,17 +74,34 @@ const buildTraverseScaffolds = self => () => {
 	self.followPath();
 };
 
-const buildFindNaivePathOverScaffold = () => () => {
-	// find robot position and orientation
-	// while true
-	//   while next tile is scaffold
-	//     move forward 1 space
-	//     record movement
-	//   if there is a scaffold within 1 turn
-	//     rotate once
-	//     record rotation
-	//   else
-	//     stop
+const buildFindNaivePathOverScaffold = self => () => {
+	self.findRobotPositionAndOrientation();
+	while (true) {
+		while (self.isNextTileScaffold()) {
+			self.path.push('1');
+			const { x: xPosition, y: yPosition, } = self.position;
+			const { x: xOffset, y: yOffset, } = self.orientation;
+			self.position = {
+				x: xPosition + xOffset,
+				y: yPosition + yOffset,
+			};
+		}
+
+		self.rotateRobot(rotationCommandSymbols.turnRight);
+		if (self.isNextTileScaffold()) {
+			self.path.push(rotationCommandSymbols.turnRight);
+			continue;
+		}
+
+		self.rotateRobot(rotationCommandSymbols.turnLeft);
+		self.rotateRobot(rotationCommandSymbols.turnLeft);
+		if (self.isNextTileScaffold()) {
+			self.path.push(rotationCommandSymbols.turnLeft);
+			continue;
+		}
+
+		return;
+	}
 };
 
 const buildFindRobotPositionAndOrientation = self => () => {
@@ -136,11 +154,11 @@ const buildIsNextTileScaffold = self => () => {
 	const yMax = self.scaffoldMapper.scaffolds.length - 1;
 	const xMax = self.scaffoldMapper.scaffolds[0].length - 1;
 
-	if (nextTilePosition.x < 0 || nextTilePosition > xMax) {
+	if (nextTilePosition.x < 0 || nextTilePosition.x > xMax) {
 		return false;
 	}
 
-	if (nextTilePosition.y < 0 || nextTilePosition > yMax) {
+	if (nextTilePosition.y < 0 || nextTilePosition.y > yMax) {
 		return false;
 	}
 
