@@ -77,14 +77,18 @@ const buildTraverseScaffolds = self => () => {
 const buildFindNaivePathOverScaffold = self => () => {
 	self.findRobotPositionAndOrientation();
 	while (true) {
+		let tilesTravelled = 0;
 		while (self.isNextTileScaffold()) {
-			self.path.push('1');
+			tilesTravelled += 1;
 			const { x: xPosition, y: yPosition, } = self.position;
 			const { x: xOffset, y: yOffset, } = self.orientation;
 			self.position = {
 				x: xPosition + xOffset,
 				y: yPosition + yOffset,
 			};
+		}
+		if (tilesTravelled > 0) {
+			self.path.push(tilesTravelled.toString());
 		}
 
 		self.rotateRobot(rotationCommandSymbols.turnRight);
