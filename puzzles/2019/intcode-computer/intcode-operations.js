@@ -327,6 +327,7 @@ const handleAdjustRelativeBase = (self, parameterValueGetters) => () => {
 const handleHalt = self => () => {
 	const operationLength = 1;
 	self.instructionPtr += operationLength;
+	self.halted = true;
 	return;
 };
 

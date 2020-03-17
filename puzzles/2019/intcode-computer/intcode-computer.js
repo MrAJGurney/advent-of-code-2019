@@ -28,6 +28,8 @@ const buildIntcodeComputer = software => {
 
 		outputHeap: [],
 		inputQueue: [],
+
+		halted: false,
 	};
 
 	const getReadValue = buildGetReadValue(
