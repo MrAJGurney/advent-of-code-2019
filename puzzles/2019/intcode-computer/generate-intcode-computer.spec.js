@@ -18,9 +18,9 @@ describe('day 02 (initial implementation)', () => {
 				const intcodeComputer = generateIntcodeComputer(software);
 				intcodeComputer.next();
 
-				const { value, } = intcodeComputer.next();
+				const { value: { _debug, }, } = intcodeComputer.next();
 
-				expect(value.software).toStrictEqual(endState);
+				expect( _debug.software).toStrictEqual(endState);
 			});
 		});
 	});
@@ -29,7 +29,7 @@ describe('day 02 (initial implementation)', () => {
 describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 	describe('input and output', () => {
 		describe('has the expected output', () => {
-			const states =[
+			const states = [
 				{ software: ['3', '0', '4', '0', '99', ], input: '7', expectedOutput: ['7', ], },
 				{ software: ['3', '0', '4', '0', '99', ], input: '42', expectedOutput: ['42', ], },
 				{ software: ['3', '0', '4', '0', '99', ], input: '0', expectedOutput: ['0', ], },
@@ -40,14 +40,16 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 					const intcodeComputer = generateIntcodeComputer(software);
 
 					let intcodeComputerResult = { done: false, };
+					let output = [];
 					while (!intcodeComputerResult.done) {
 						intcodeComputerResult = intcodeComputer.next(input);
+						output = output.concat(intcodeComputerResult.value.outputSinceInput);
 						if (intcodeComputerResult.done) {
 							break;
 						};
 					};
 
-					expect(intcodeComputerResult.value.outputHeap).toStrictEqual(expectedOutput);
+					expect(output).toStrictEqual(expectedOutput);
 				});
 			});
 		});
@@ -65,7 +67,9 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 				intcodeComputerResult = intcodeComputer.next();
 			};
 
-			expect(intcodeComputerResult.value.software[expected.address]).toStrictEqual(expected.value);
+			const { value: { _debug, }, } = intcodeComputerResult;
+
+			expect( _debug.software[expected.address]).toStrictEqual(expected.value);
 		});
 	});
 
@@ -87,11 +91,13 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 					const intcodeComputer = generateIntcodeComputer(software);
 
 					let intcodeComputerResult = { done: false, };
+					let output = [];
 					while (!intcodeComputerResult.done) {
 						intcodeComputerResult = intcodeComputer.next(input);
+						output = output.concat(intcodeComputerResult.value.outputSinceInput);
 					};
 
-					expect(intcodeComputerResult.value.outputHeap).toStrictEqual(expectedOutput);
+					expect(output).toStrictEqual(expectedOutput);
 				});
 			});
 		});
@@ -115,11 +121,13 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 					const intcodeComputer = generateIntcodeComputer(software);
 
 					let intcodeComputerResult = { done: false, };
+					let output = [];
 					while (!intcodeComputerResult.done) {
 						intcodeComputerResult = intcodeComputer.next(input);
+						output = output.concat(intcodeComputerResult.value.outputSinceInput);
 					};
 
-					expect(intcodeComputerResult.value.outputHeap).toStrictEqual(expectedOutput);
+					expect(output).toStrictEqual(expectedOutput);
 				});
 			});
 		});
@@ -141,11 +149,13 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 					const intcodeComputer = generateIntcodeComputer(software);
 
 					let intcodeComputerResult = { done: false, };
+					let output = [];
 					while (!intcodeComputerResult.done) {
 						intcodeComputerResult = intcodeComputer.next(input);
+						output = output.concat(intcodeComputerResult.value.outputSinceInput);
 					};
 
-					expect(intcodeComputerResult.value.outputHeap).toStrictEqual(expectedOutput);
+					expect(output).toStrictEqual(expectedOutput);
 				});
 			});
 		});
@@ -172,11 +182,13 @@ describe('day 05 (I/O, jump-if, less-than/equals, parameter modes)', () => {
 				const intcodeComputer = generateIntcodeComputer(software);
 
 				let intcodeComputerResult = { done: false, };
+				let output = [];
 				while (!intcodeComputerResult.done) {
 					intcodeComputerResult = intcodeComputer.next(input);
+					output = output.concat(intcodeComputerResult.value.outputSinceInput);
 				};
 
-				expect(intcodeComputerResult.value.outputHeap).toStrictEqual(expectedOutput);
+				expect(output).toStrictEqual(expectedOutput);
 			});
 		});
 	});
@@ -195,11 +207,13 @@ describe('day 09 (arbitrarily large values, relative parameter mode)', () => {
 			const intcodeComputer = generateIntcodeComputer(software);
 
 			let intcodeComputerResult = { done: false, };
+			let output = [];
 			while (!intcodeComputerResult.done) {
 				intcodeComputerResult = intcodeComputer.next();
+				output = output.concat(intcodeComputerResult.value.outputSinceInput);
 			};
 
-			expect(intcodeComputerResult.value.outputHeap).toStrictEqual(expectedOutput);
+			expect(output).toStrictEqual(expectedOutput);
 		});
 	});
 
@@ -212,12 +226,14 @@ describe('day 09 (arbitrarily large values, relative parameter mode)', () => {
 			const intcodeComputer = generateIntcodeComputer(software);
 
 			let intcodeComputerResult = { done: false, };
+			let output = [];
 			while (!intcodeComputerResult.done) {
 				intcodeComputerResult = intcodeComputer.next();
+				output = output.concat(intcodeComputerResult.value.outputSinceInput);
 			};
 
-			expect(intcodeComputerResult.value.outputHeap).toHaveLength(1);
-			expect(intcodeComputerResult.value.outputHeap[0]).toHaveLength(expectedOutputLength);
+			expect(output).toHaveLength(1);
+			expect(output[0]).toHaveLength(expectedOutputLength);
 		});
 	});
 
@@ -230,11 +246,16 @@ describe('day 09 (arbitrarily large values, relative parameter mode)', () => {
 			const intcodeComputer = generateIntcodeComputer(software);
 
 			let intcodeComputerResult = { done: false, };
+			let output = [];
 			while (!intcodeComputerResult.done) {
 				intcodeComputerResult = intcodeComputer.next();
+				output = output.concat(intcodeComputerResult.value.outputSinceInput);
+				if (intcodeComputerResult.done) {
+					break;
+				};
 			};
 
-			expect(intcodeComputerResult.value.outputHeap).toStrictEqual(expectedOutput);
+			expect(output).toStrictEqual(expectedOutput);
 		});
 	});
 });
